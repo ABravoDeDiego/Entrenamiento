@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f6f8">
+<title>Entrenamiento · Semana 28 Sep</title>
+<style>
+*{box-sizing:border-box} :root{--bg:#f5f6f8;--card:#fff;--text:#17191d;--muted:#6d737c;--line:#e2e5e9;--soft:#eef1f4;--ok:#e9f7ee;--warn:#fff4df;--danger:#fdeaea}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:720px;margin:auto;padding:14px 12px 130px}.week{background:#17191d;color:white;border-radius:18px;padding:16px;margin-bottom:10px}.week h1{font-size:21px;margin:0 0 4px}.week p{margin:0;opacity:.78;font-size:13px}
+.tabs{display:flex;gap:7px;overflow-x:auto;padding:4px 0 10px;position:sticky;top:0;background:rgba(245,246,248,.96);z-index:5}.tabs button{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:12px;padding:10px 12px;font-weight:800}.tabs button.active{background:#17191d;color:#fff}
+.day{display:none}.day.active{display:block}.dayhead{display:flex;justify-content:space-between;align-items:end;margin:10px 2px}.dayhead h2{font-size:23px;margin:0}.progress{font-size:12px;color:var(--muted);font-weight:800}
+.section{font-size:12px;letter-spacing:.08em;font-weight:900;color:#59606a;margin:24px 4px 9px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px;margin:9px 0;transition:.2s}.card.done{border-color:#b9dfc6;background:#fbfffc}.card.missing{border-color:#e7adad}.card h3{font-size:18px;margin:0 0 8px}.complete{font-size:12px;font-weight:900;margin-left:6px}.meta{font-size:13px;line-height:1.45;margin:5px 0}.muted{color:var(--muted)}.target{font-weight:750;background:var(--soft);padding:10px;border-radius:12px;margin:10px 0}.note{font-size:13px;background:#fff7e8;border-radius:11px;padding:9px;margin:8px 0}.steps{padding-left:20px;line-height:1.55;font-size:14px}
+.label{font-size:13px;font-weight:800;margin:13px 0 6px}.head,.row{display:grid;grid-template-columns:42px 1fr 1fr;gap:7px;align-items:center}.head{font-size:11px;color:var(--muted);font-weight:800}.row{margin:7px 0}.sl{font-weight:900}
+input,textarea,select{width:100%;border:1px solid #d7dbe0;border-radius:11px;background:white;font:inherit;padding:11px}input[type=number]{font-size:17px;text-align:center}textarea{min-height:62px;resize:vertical}.uw{position:relative}.uw input{padding-right:34px}.unit{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--muted)}
+.rir{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.rir button,.scale button,.quick{border:1px solid #d7dbe0;background:#fff;border-radius:10px;padding:10px 3px;font-weight:800}.rir button.sel,.scale button.sel{background:#17191d;color:#fff}.scale{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}.scale button{font-size:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.quick{width:100%;margin:3px 0 10px;background:#f7f8fa}.quick:active{transform:scale(.99)}
+.status{padding:10px 12px;border-radius:12px;margin:10px 0;font-size:13px;font-weight:750;display:none}.status.show{display:block}.status.warn{background:var(--warn)}.status.ok{background:var(--ok)}
+.actions{position:fixed;left:0;right:0;bottom:0;background:rgba(245,246,248,.96);border-top:1px solid var(--line);padding:9px 12px calc(9px + env(safe-area-inset-bottom));display:flex;gap:7px;z-index:10}.actions button{flex:1;border:0;border-radius:12px;padding:13px 6px;font-weight:900}.primary{background:#17191d;color:#fff}.secondary{background:#e2e5e9}.output{white-space:pre-wrap;background:#111;color:#fff;border-radius:14px;padding:13px;font:12px/1.5 ui-monospace,monospace;display:none;margin-top:10px}
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.metric{display:none}.metric.on{display:block}.sleepgrid{display:grid;grid-template-columns:1.5fr 1fr;gap:7px;align-items:center}.sleepgrid div{font-size:13px}.sleepgrid input{text-align:center}
+.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#17191d;color:#fff;padding:10px 14px;border-radius:20px;opacity:0;pointer-events:none;z-index:20}.toast.show{opacity:1}
+@media(max-width:390px){.week h1{font-size:19px}.card{padding:13px}.scale{grid-template-columns:repeat(6,1fr)}}
+</style>
+</head>
+<body>
+<main>
+<div class="week"><h1>SEMANA 28 SEPTIEMBRE — 2 OCTUBRE 2026</h1><p>V3 · 3 fuerza + 2 cardio · Guardado automático</p></div>
+<div class="tabs" id="tabs"></div>
+<div id="days"></div>
+<div class="section">RESUMEN PARA EL DIARIO</div>
+<div class="card"><div id="status" class="status"></div><div id="output" class="output"></div></div>
+</main>
+<div class="actions"><button class="secondary" id="reset">Nueva semana</button><button class="primary" id="gen">Generar día</button><button class="primary" id="copy">Copiar</button></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const WEEK="SEMANA 28 SEPTIEMBRE — 2 OCTUBRE 2026";
+const STORE="entreno_v3_semana_2026-09-28";
+const RIRS=[0,1,2,3,"4+"];
+
+const DAYS=[
+{id:"mon",tab:"Lun · A",title:"LUNES — FUERZA A · GIMNASIO",type:"strength",
+warm:`<ol class="steps"><li><b>Cinta · 4 min.</b> Caminata cómoda. Inclinación 0–3 %.</li><li><b>Movilidad/activación · 2 min.</b> Movilidad suave de hombros, retracciones escapulares y 8–10 rotaciones externas sin carga.</li><li><b>Aproximación.</b> Press pecho: 1 serie ligera × 8–10. No cuenta como serie efectiva.</li></ol>`,
+ex:[
+["SUPER SERIE 1","Press pecho · Máquina","3 × 10–12","20 kg × 11 · 20 kg × 11 · 20 kg × 11","20 kg × 11–12 · 20 kg × 11–12 · 25 kg × 8–10","weight",3,"mon_chest"],
+["SUPER SERIE 1","Pull-over · Polea","3 × 10–12","12,5 kg × 10 · 12,5 kg × 10 · 12,5 kg × 10","12,5 kg × 11 · 12,5 kg × 11 · 12,5 kg × 11","weight",3,"mon_pull"],
+["SUPER SERIE 2","Curl bíceps · Mancuernas","3 × 10–12","7,5 kg × 10 · 7,5 kg × 10 · 7,5 kg × 10","7,5 kg × 11 · 7,5 kg × 11 · 7,5 kg × 11","weight",3,"mon_bic"],
+["SUPER SERIE 2","Tríceps · Polea","3 × 10–12","10 kg × 10 · 10 kg × 10 · 10 kg × 10","10 kg × 10–12 · 10 kg × 10–12 · 12,5 kg × 8–10","weight",3,"mon_tri"],
+["SUPER SERIE 3","Elevaciones laterales · Mancuernas","3 × 10–15","5 kg × 10 · 6 kg × 10 · 6 kg × 10","6 kg × 10 · 6 kg × 10 · 6 kg × 10","weight",3,"mon_lat"],
+["SUPER SERIE 3","Rotación externa · Mancuernas","3 × 10–15","2,5 kg × 10 · 2,5 kg × 10 · 4 kg × 6","2,5 kg × 12 · 2,5 kg × 12 · 2,5 kg × 12","weight",3,"mon_rot"],
+["CORE","Plancha","2 × 45–75 s","50 s · 50 s","55 s · 55 s","time",2,"mon_plank"],
+["CORE","Crunch · Disco","2 × 10–15","10 kg × 10 · 10 kg × 10","10 kg × 11–12 · 10 kg × 11–12","weight",2,"mon_crunch"]
+]},
+{id:"tue",tab:"Mar · Cardio",title:"MARTES — CARDIO + MOVILIDAD",type:"cardio",cardioMinutes:"30",cardioNote:"Referencia inicial: caminar en cinta, inclinación 6–10 %, intensidad moderada y sostenible. No correr.",mobility:"Flexores de cadera · Cadera · Movilidad torácica · Hombros · Tobillos"},
+{id:"wed",tab:"Mié · B",title:"MIÉRCOLES — FUERZA B · GIMNASIO",type:"strength",
+warm:`<ol class="steps"><li><b>Cinta · 4 min.</b> Caminata cómoda. Inclinación 0–3 %.</li><li><b>Movilidad/activación.</b> 8–10 bisagras de cadera; 8–10 sentadillas parciales sin peso si rodilla 0/10; movilidad de cadera y tobillo.</li><li><b>Aproximación.</b> Peso muerto rumano: 1 serie ligera × 8. No cuenta como efectiva.</li></ol>`,
+ex:[
+["SUPER SERIE 1","Peso muerto rumano · Mancuernas","3 × 10–12","8 kg × 10 · 8 kg × 10 · 10 kg × 10","10 kg × 10 · 8 kg × 10–12 · 8 kg × 10–12","weight",3,"wed_rdl"],
+["SUPER SERIE 1","Curl femoral · Máquina","3 × 10–15","25 kg × 10 · 25 kg × 10 · 30 kg × 10","30 kg × 10 · 25 kg × 10–12 · 25 kg × 10–12","weight",3,"wed_curl"],
+["SUPER SERIE 2","Prensa de piernas · Máquina","3 × 10–15","45 kg × 12 · 45 kg × 12 · 45 kg × 12","45 kg × 12 · 45 kg × 12 · 45 kg × 12","weight",3,"wed_press","Objetivo largo plazo: progresar hacia 80–90 kg. Hoy NO buscamos acelerar esa progresión."],
+["SUPER SERIE 2","Gemelos · Máquina/Prensa","3 × 12–20","10 kg × 14 · 10 kg × 14 · 5 kg × 8","5 kg × 12 · 5 kg × 12 · 5 kg × 12","weight",3,"wed_calf","Prioridad: evitar RIR 0."],
+["SUPER SERIE 3","Hip thrust · Máquina","3 × 10–15","5 kg × 8 · 5 kg × 8 · 5 kg × 10","5 kg × 10 · 5 kg × 10 · 5 kg × 10","weight",3,"wed_hip","Prioridad: técnica y familiarización con la máquina."],
+["SUPER SERIE 3","Abductores · Máquina","3 × 12–20","25 kg × 12 · 25 kg × 12 · 30 kg × 12","30 kg × 12 · 25 kg × 12 · 25 kg × 12","weight",3,"wed_abd"],
+["LUMBAR + CORE","Extensión lumbar · Banco/Máquina","2 × 10–15","peso corporal × 10 · peso corporal × 10","peso corporal × 12 · peso corporal × 12","body",2,"wed_back"],
+["LUMBAR + CORE","Plancha lateral","2 × 15–30 s/lado","20 s · 25 s","25 s · 25 s por lado","time",2,"wed_side"]
+]},
+{id:"thu",tab:"Jue · Cardio",title:"JUEVES — CARDIO + MOVILIDAD",type:"cardio",cardioMinutes:"30–35",cardioNote:"Referencia: caminar en cinta, inclinación 6–10 %, trabajo aeróbico moderado, sin impacto y sin buscar agotamiento.",mobility:"Flexores de cadera · Cadera · Columna torácica · Hombros · Tobillos"},
+{id:"fri",tab:"Vie · C",title:"VIERNES — FUERZA C · GIMNASIO",type:"strength",
+warm:`<ol class="steps"><li><b>Cinta · 4 min.</b> Caminata suave. Inclinación 0–3 %.</li><li><b>Movilidad/activación.</b> Hombros, retracciones escapulares, rotación externa sin carga y movilidad de cadera.</li><li><b>Aproximación dominadas.</b> 1 serie con asistencia alta × 5–6 repeticiones cómodas. No cuenta como efectiva.</li></ol>`,
+ex:[
+["SUPER SERIE 1","Dominadas · Máquina asistida","3 × 8–10","—","CALIBRAR asistencia × 8–10","assist",3,"fri_pullup","Más kg = más asistencia = más fácil. Menos kg = menos asistencia = más difícil. Objetivo largo plazo: 1 dominada estricta sin asistencia, sin fecha límite."],
+["SUPER SERIE 1","Press pecho · Máquina","3 × 10–12","Usar resultado de Fuerza A de esta semana","Repetir carga de A sin buscar progresión adicional","weight",3,"fri_chest","El botón inferior copia las series reales del lunes.","mon_chest"],
+["SUPER SERIE 2","Prensa de piernas · Máquina","3 × 10–15","Usar resultado de Fuerza B de esta semana","Repetir carga de B con técnica limpia","weight",3,"fri_press","El botón inferior copia las series reales del miércoles.","wed_press"],
+["SUPER SERIE 2","Curl femoral · Máquina","3 × 10–15","Usar resultado de Fuerza B de esta semana","Repetir carga de B sin buscar progresión adicional","weight",3,"fri_curl","El botón inferior copia las series reales del miércoles.","wed_curl"],
+["SUPER SERIE 3","Curl bíceps · Mancuernas","3 × 10–12","Usar resultado de Fuerza A de esta semana","Repetir carga de A","weight",3,"fri_bic","El botón inferior copia las series reales del lunes.","mon_bic"],
+["SUPER SERIE 3","Tríceps · Polea","3 × 10–12","Usar resultado de Fuerza A de esta semana","Repetir carga de A","weight",3,"fri_tri","El botón inferior copia las series reales del lunes.","mon_tri"],
+["SUPER SERIE 4","Elevaciones laterales · Mancuernas","3 × 10–15","Usar resultado de Fuerza A de esta semana","Repetir carga de A","weight",3,"fri_lat","El botón inferior copia las series reales del lunes.","mon_lat"],
+["SUPER SERIE 4","Gemelos · Máquina/Prensa","3 × 12–20","Usar resultado de Fuerza B de esta semana","Repetir carga de B evitando RIR 0","weight",3,"fri_calf","El botón inferior copia las series reales del miércoles.","wed_calf"]
+]}
+];
+
+const state=JSON.parse(localStorage.getItem(STORE)||"{}");
+const $=(s,p=document)=>p.querySelector(s), $$=(s,p=document)=>[...p.querySelectorAll(s)];
+function save(){localStorage.setItem(STORE,JSON.stringify(state))}
+function setv(k,v){state[k]=v;save();refresh()}
+function val(k){return state[k]??""}
+function esc(s){return String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function toast(s){const t=$("#toast");t.textContent=s;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1500)}
+function input(k,type="number",unit="",step=""){return `<div class="uw"><input data-k="${k}" type="${type}" ${step?`step="${step}"`:""} inputmode="${type==="number"?"decimal":"text"}" value="${esc(val(k))}">${unit?`<span class="unit">${unit}</span>`:""}</div>`}
+function rir(id){return `<div class="label">💪 RIR</div><div class="rir" data-rir="${id}">${RIRS.map(v=>`<button type="button" data-v="${v}" class="${String(val(id+"_rir"))===String(v)?"sel":""}">${v}</button>`).join("")}</div>`}
+function scale(k){return `<div class="scale" data-scale="${k}">${[0,1,2,3,4,5,6,7,8,9,10].map(v=>`<button type="button" data-v="${v}" class="${String(val(k))===String(v)?"sel":""}">${v}</button>`).join("")}</div>`}
+
+function renderExercise(e){
+ const [sec,n,r,p,t,type,sets,id,note,copyFrom]=e; let rows="";
+ for(let i=1;i<=sets;i++){
+  if(type==="weight"||type==="assist") rows+=`<div class="row"><div class="sl">S${i}</div>${input(id+"_w"+i,"number","kg",".5")}${input(id+"_r"+i,"number","")}</div>`;
+  if(type==="body") rows+=`<div class="row"><div class="sl">S${i}</div><div class="muted" style="text-align:center">Peso corporal</div>${input(id+"_r"+i,"number","")}</div>`;
+  if(type==="time") rows+=`<div class="row"><div class="sl">S${i}</div><div style="grid-column:2/4">${input(id+"_t"+i,"number","s")}</div></div>`;
+ }
+ let head=type==="time"?`<div class="head"><div>Serie</div><div style="grid-column:2/4">Tiempo</div></div>`:`<div class="head"><div>Serie</div><div>${type==="assist"?"Asistencia":"Peso"}</div><div>Reps</div></div>`;
+ return `<div class="card exercise" data-ex="${id}" data-type="${type}" data-sets="${sets}">
+ <h3>${n}<span class="complete"></span></h3><div class="meta">🎯 <b>Rango:</b> ${r}</div><div class="meta muted"><b>Anterior:</b> ${p}</div>
+ <div class="target">➡️ Objetivo sesión: ${t}</div>${note?`<div class="note">${note}</div>`:""}
+ ${copyFrom?`<button class="quick copy-prev" type="button" data-from="${copyFrom}" data-to="${id}" data-sets="${sets}">↳ Cargar resultado anterior de esta semana</button>`:""}
+ ${head}${rows}${rir(id)}<div class="label">💬 Comentarios</div><textarea data-k="${id}_c" placeholder="Opcional">${esc(val(id+"_c"))}</textarea></div>`;
+}
+function closing(day){
+ return `<div class="section">CIERRE DE SESIÓN</div><div class="card closing" data-close="${day}">
+ <div class="label">⏱️ Tiempo total</div>${input(day+"_time","number","min")}
+ <div class="label">Hombro /10</div>${scale(day+"_shoulder")}
+ <div class="label">Rodilla /10</div>${scale(day+"_knee")}
+ <div class="label">Zona lumbar /10</div>${scale(day+"_lumbar")}
+ <div class="label">Otras molestias</div><textarea data-k="${day}_other" placeholder="Opcional. Zona, intensidad y momento">${esc(val(day+"_other"))}</textarea>
+ <div class="two"><div><div class="label">⚡ Energía antes /10</div>${input(day+"_eb","number","")}</div><div><div class="label">⚡ Energía después /10</div>${input(day+"_ea","number","")}</div></div>
+ <div class="label">Sensaciones generales</div><textarea data-k="${day}_general">${esc(val(day+"_general"))}</textarea></div>`;
+}
+function strengthDay(d){
+ let out=`<div class="day" id="day_${d.id}" data-day="${d.id}"><div class="dayhead"><h2>${d.title}</h2><div class="progress"></div></div>
+ <div class="section">CALENTAMIENTO</div><div class="card">${d.warm}<div class="label">💬 Sensaciones tras calentamiento</div><textarea data-k="${d.id}_warm">${esc(val(d.id+"_warm"))}</textarea></div>`;
+ let sec="";
+ d.ex.forEach(e=>{if(e[0]!==sec){sec=e[0];out+=`<div class="section">${sec}</div>`}out+=renderExercise(e)});
+ return out+closing(d.id)+`</div>`;
+}
+function cardioDay(d){
+ const k=d.id;
+ return `<div class="day" id="day_${k}" data-day="${k}"><div class="dayhead"><h2>${d.title}</h2><div class="progress"></div></div>
+ <div class="section">CALENTAMIENTO · 5 MIN</div><div class="card"><h3>Cinta / activación suave</h3><div class="meta">0–2 % de inclinación. Velocidad cómoda y progresiva.</div>
+ <div class="metric-grid"><div><div class="label">Tiempo</div>${input(k+"_wu_time","number","min")}</div><div><div class="label">Velocidad media</div>${input(k+"_wu_speed","number","km/h",".1")}</div><div><div class="label">Inclinación</div>${input(k+"_wu_inc","number","%",".5")}</div></div></div>
+ <div class="section">CARDIO PRINCIPAL · ${d.cardioMinutes} MIN</div><div class="card cardio" data-cardio="${k}">
+ <h3>Cardio principal<span class="complete"></span></h3><div class="target">${d.cardioNote}</div>
+ <div class="label">Modalidad</div><select data-k="${k}_mode">
+ <option value="">Selecciona…</option><option value="walk_out">Andar · calle</option><option value="walk_tread">Andar · cinta</option><option value="run_out">Correr · exterior</option><option value="run_tread">Correr · cinta</option><option value="bike">Bici estática</option></select>
+ <div class="metric-grid">
+ <div class="metric" data-metric="time"><div class="label">Tiempo</div>${input(k+"_c_time","number","min")}</div>
+ <div class="metric" data-metric="distance"><div class="label">Distancia</div>${input(k+"_c_distance","number","km",".01")}</div>
+ <div class="metric" data-metric="speed"><div class="label">Velocidad media</div>${input(k+"_c_speed","number","km/h",".1")}</div>
+ <div class="metric" data-metric="incline"><div class="label">Inclinación media</div>${input(k+"_c_inc","number","%",".5")}</div>
+ </div><div class="label">💬 Comentarios</div><textarea data-k="${k}_c_comments" placeholder="Opcional">${esc(val(k+"_c_comments"))}</textarea></div>
+ <div class="section">VUELTA A LA CALMA · 5 MIN</div><div class="card"><div class="meta">Inclinación 0–2 %. Reducir progresivamente la velocidad.</div></div>
+ <div class="section">MOVILIDAD · 5–8 MIN</div><div class="card"><div class="meta">${d.mobility}. Sin forzar posiciones.</div></div>
+ ${closing(k)}</div>`;
+}
+function sleepDay(){
+ const nights=[["sunmon","Domingo → lunes"],["montue","Lunes → martes"],["tuewed","Martes → miércoles"],["wedthu","Miércoles → jueves"],["thufri","Jueves → viernes"],["frisat","Viernes → sábado"],["satsun","Sábado → domingo"]];
+ return `<div class="day" id="day_sleep" data-day="sleep"><div class="dayhead"><h2>SUEÑO — SEGUIMIENTO SEMANAL</h2></div><div class="card"><div class="target">Objetivo habitual: 7–7,5 h o más cuando el cuerpo lo necesite.</div><div class="sleepgrid">${nights.map(([k,n])=>`<div>${n}</div>${input("sleep_"+k,"number","h",".25")}`).join("")}</div></div></div>`;
+}
+function render(){
+ $("#tabs").innerHTML=DAYS.map(d=>`<button data-tab="${d.id}">${d.tab}</button>`).join("")+`<button data-tab="sleep">Sueño</button>`;
+ $("#days").innerHTML=DAYS.map(d=>d.type==="strength"?strengthDay(d):cardioDay(d)).join("")+sleepDay();
+ bind(); switchDay(state._active||"mon"); refresh();
+}
+function bind(){
+ $$("[data-k]").forEach(el=>{el.addEventListener("input",()=>setv(el.dataset.k,el.value));el.addEventListener("change",()=>setv(el.dataset.k,el.value))});
+ $$("[data-rir] button").forEach(b=>b.onclick=()=>setv(b.parentElement.dataset.rir+"_rir",b.dataset.v));
+ $$("[data-scale] button").forEach(b=>b.onclick=()=>setv(b.parentElement.dataset.scale,b.dataset.v));
+ $$(".copy-prev").forEach(b=>b.onclick=()=>{for(let i=1;i<=+b.dataset.sets;i++){state[b.dataset.to+"_w"+i]=val(b.dataset.from+"_w"+i);state[b.dataset.to+"_r"+i]=val(b.dataset.from+"_r"+i)}save();render();switchDay("fri");toast("Series cargadas")});
+ $$("#tabs button").forEach(b=>b.onclick=()=>switchDay(b.dataset.tab));
+}
+function switchDay(id){
+ state._active=id;save();$$(".day").forEach(x=>x.classList.toggle("active",x.dataset.day===id));$$("#tabs button").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));refresh();
+}
+function cardioReq(mode){
+ return {walk_out:["time","speed"],walk_tread:["time","speed","incline"],run_out:["time","distance"],run_tread:["time","distance","speed","incline"],bike:["time","distance"]}[mode]||[];
+}
+function exMissing(card){
+ const id=card.dataset.ex,type=card.dataset.type,sets=+card.dataset.sets,m=[];
+ for(let i=1;i<=sets;i++){
+  if(type==="weight"||type==="assist"){if(val(id+"_w"+i)==="")m.push(`S${i} peso`);if(val(id+"_r"+i)==="")m.push(`S${i} reps`)}
+  if(type==="body"&&val(id+"_r"+i)==="")m.push(`S${i} reps`);
+  if(type==="time"&&val(id+"_t"+i)==="")m.push(`S${i} tiempo`);
+ }
+ if(val(id+"_rir")==="")m.push("RIR"); return m;
+}
+function closeMissing(day){
+ const m=[]; if(val(day+"_time")==="")m.push("tiempo total");
+ ["shoulder","knee","lumbar"].forEach(x=>{if(val(day+"_"+x)==="")m.push(x==="shoulder"?"hombro":x==="knee"?"rodilla":"zona lumbar")});
+ if(val(day+"_eb")==="")m.push("energía antes");if(val(day+"_ea")==="")m.push("energía después");if(val(day+"_general")==="")m.push("sensaciones generales");return m;
+}
+function refresh(){
+ const active=state._active||"mon", day=$("#day_"+active); if(!day)return;
+ if(DAYS.find(d=>d.id===active)?.type==="cardio"){
+  const mode=val(active+"_mode"), req=cardioReq(mode);
+  $$(".metric",day).forEach(x=>x.classList.toggle("on",req.includes(x.dataset.metric)||(x.dataset.metric==="distance"&&mode==="walk_tread")));
+  const c=$(".cardio",day), missing=[];if(!mode)missing.push("modalidad");req.forEach(x=>{const map={time:"_c_time",distance:"_c_distance",speed:"_c_speed",incline:"_c_inc"};if(val(active+map[x])==="")missing.push(x)});
+  c.classList.toggle("done",missing.length===0&&mode!=="");$(".complete",c).textContent=missing.length===0&&mode?" ✓ Completado":"";
+  $(".progress",day).textContent=missing.length===0&&mode?"Cardio completado":"Cardio pendiente";
+ } else if(active!=="sleep"){
+  const cards=$$(".exercise",day);let done=0;cards.forEach(c=>{const m=exMissing(c);c.classList.toggle("done",m.length===0);$(".complete",c).textContent=m.length?"":" ✓ Completado";if(!m.length)done++});
+  $(".progress",day).textContent=`${done}/${cards.length} ejercicios`;
+ }
+}
+function validateDay(id){
+ const d=DAYS.find(x=>x.id===id), misses=[];
+ if(!d)return misses;
+ if(d.type==="strength"){
+  $$(".exercise",$("#day_"+id)).forEach(c=>{const m=exMissing(c);if(m.length)misses.push(`${$("h3",c).childNodes[0].textContent.trim()}: ${m.join(", ")}`)});
+ }else{
+  const mode=val(id+"_mode");if(!mode)misses.push("Cardio principal: modalidad");
+  else cardioReq(mode).forEach(x=>{const map={time:"_c_time",distance:"_c_distance",speed:"_c_speed",incline:"_c_inc"};if(val(id+map[x])==="")misses.push(`Cardio principal: ${x}`)});
+ }
+ closeMissing(id).forEach(x=>misses.push(`Cierre: ${x}`));return misses;
+}
+function fmtNum(x){return String(x).replace(".",",")}
+function summaryStrength(d){
+ let s=`${WEEK}\n\n${d.title}\n\nCALENTAMIENTO\nSensaciones tras calentamiento: ${val(d.id+"_warm")||"—"}\n`,sec="";
+ d.ex.forEach(e=>{const [group,n,r,p,t,type,sets,id]=e;if(group!==sec){sec=group;s+=`\n${group}\n`}let arr=[];for(let i=1;i<=sets;i++){if(type==="weight")arr.push(`${fmtNum(val(id+"_w"+i))} kg - ${val(id+"_r"+i)}`);if(type==="assist")arr.push(`${fmtNum(val(id+"_w"+i))} kg asistencia - ${val(id+"_r"+i)}`);if(type==="body")arr.push(`Peso corporal - ${val(id+"_r"+i)}`);if(type==="time")arr.push(`${val(id+"_t"+i)} s`)}s+=`- ${n}: ${arr.join(" / ")}\n  RIR: ${val(id+"_rir")}`;if(val(id+"_c"))s+=`\n  Comentarios: ${val(id+"_c")}`;s+="\n"});
+ return s+closingSummary(d.id);
+}
+function modeName(m){return {walk_out:"Andar · calle",walk_tread:"Andar · cinta",run_out:"Correr · exterior",run_tread:"Correr · cinta",bike:"Bici estática"}[m]||"—"}
+function summaryCardio(d){
+ const k=d.id,m=val(k+"_mode");let s=`${WEEK}\n\n${d.title}\n\nCALENTAMIENTO\nTiempo: ${val(k+"_wu_time")||"—"} min\nVelocidad media: ${val(k+"_wu_speed")||"—"} km/h\nInclinación: ${val(k+"_wu_inc")||"—"} %\n\nCARDIO PRINCIPAL\nModalidad: ${modeName(m)}\n`;
+ if(val(k+"_c_time")!=="")s+=`Tiempo: ${val(k+"_c_time")} min\n`;if(val(k+"_c_distance")!=="")s+=`Distancia: ${fmtNum(val(k+"_c_distance"))} km\n`;if(val(k+"_c_speed")!=="")s+=`Velocidad media: ${fmtNum(val(k+"_c_speed"))} km/h\n`;if(val(k+"_c_inc")!=="")s+=`Inclinación media: ${fmtNum(val(k+"_c_inc"))} %\n`;if(val(k+"_c_comments"))s+=`Comentarios: ${val(k+"_c_comments")}\n`;
+ s+=`\nMOVILIDAD\n${d.mobility}\n`;return s+closingSummary(k);
+}
+function closingSummary(k){return `\nCIERRE DE SESIÓN\n\nTiempo total: ${val(k+"_time")} min\n\nMolestias\nHombro: ${val(k+"_shoulder")}/10\nRodilla: ${val(k+"_knee")}/10\nZona lumbar: ${val(k+"_lumbar")}/10\nOtras molestias: ${val(k+"_other")||"—"}\n\nEnergía antes: ${val(k+"_eb")}/10\nEnergía después: ${val(k+"_ea")}/10\n\nSensaciones generales: ${val(k+"_general")}`}
+
+$("#gen").onclick=()=>{
+ const id=state._active||"mon"; if(id==="sleep"){toast("Selecciona un día de entrenamiento");return}
+ const miss=validateDay(id),st=$("#status"); if(miss.length){st.className="status warn show";st.innerHTML="⚠️ <b>Faltan datos obligatorios:</b><br>"+miss.map(x=>"• "+esc(x)).join("<br>");$("#output").style.display="none";return}
+ const d=DAYS.find(x=>x.id===id),txt=d.type==="strength"?summaryStrength(d):summaryCardio(d);state._summary=txt;save();st.className="status ok show";st.textContent="✓ Día completo. Resumen listo para copiar.";$("#output").textContent=txt;$("#output").style.display="block";toast("Resumen generado");
+};
+$("#copy").onclick=async()=>{if(!state._summary){toast("Primero genera el día");return}try{await navigator.clipboard.writeText(state._summary);toast("Copiado al portapapeles")}catch(e){toast("Mantén pulsado sobre el resumen para copiar")}};
+$("#reset").onclick=()=>{if(confirm("Esto borrará todos los datos guardados de esta semana. ¿Seguro?")){localStorage.removeItem(STORE);location.reload()}};
+render();
+</script>
+</body></html>
