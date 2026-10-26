@@ -58,4 +58,14 @@ La rutina reenviada no cambia la prescripción de la V7 publicada. Se conserva `
 - **FAIL:** al añadir la rodilla al día siguiente y regenerar el resumen, `Realizada` cambia al día de la nueva exportación.
 - **FAIL:** se permite exportar una distancia positiva con tiempo total de cero minutos y velocidad `—`.
 
-Los dos fallos están reproducidos en el script. Se registran como fallos reales, no como resultados esperados que den un verde artificial. Su corrección está pendiente de presentar y aprobar la propuesta de comportamiento. Esta revisión no modifica la interfaz ni el registro existente.
+Los dos fallos se reprodujeron en el script y quedaron pendientes de aprobación; no se trataron como resultados esperados para dar un verde artificial. La revisión inicial no modificó la interfaz ni el registro existente.
+
+
+## Correcciones aprobadas y verificadas el 26 de octubre de 2026
+
+- Cada sesión conserva la fecha de su primer resumen válido, incluso al regenerarlo para añadir la rodilla al día siguiente. La fecha persiste en la misma clave semanal de almacenamiento.
+- Si existe un resumen anterior guardado, se recupera su fecha antes de invalidar la salida al abrir. Si no se conserva una fecha anterior, se usa la del primer resumen válido generado con esta versión, sin inferir el día de entrenamiento.
+- Carrera, cinta y bici bloquean la exportación cuando la distancia es positiva y el tiempo correspondiente es cero. El aviso usa el listado de validación existente. Cero tiempo y cero distancia siguen permitidos; las omisiones y el descanso ignoran los datos de bloques omitidos.
+- **PASS:** 28 comprobaciones de Chromium, incluidas las dos regresiones, persistencia de fecha, recuperación de fecha anterior, fecha independiente por sesión, cinta, bici y omisiones.
+- **NO EJECUTADO:** WebKit y Safari real.
+- No cambian prescripciones, distribución visual, campos de entrenamiento ni la clave semanal.

@@ -94,6 +94,21 @@ async function edgeCases(){
  results.push({engine:'Chromium',test:'Conservar fecha al añadir rodilla al día siguiente',status:before===after?'PASS':'FAIL',detail:before+' → '+after});
  await p.locator('[data-k="tue_time"]').fill('0');await p.locator('#gen').click();
  results.push({engine:'Chromium',test:'Bloquear distancia positiva con cero minutos',status:await p.locator('#output').isVisible()?'FAIL':'PASS'});
+
+ const record=(test,ok,detail)=>results.push({engine:'Chromium',test,status:ok?'PASS':'FAIL',...(detail?{detail}:{})});
+ record('Aviso de tiempo incoherente visible',/hay distancia registrada, pero el tiempo es 0 min/.test(await p.locator('#status').innerText()));
+ await p.locator('[data-k="tue_time"]').fill('36');await p.locator('#gen').click();const savedSummary=await p.locator('#output').innerText();
+ await p.reload();await p.locator('#gen').click();
+ record('Fecha y seguimiento de rodilla persisten tras recarga',(await p.locator('#output').innerText()).includes(before)&&(await p.locator('#output').innerText()).includes('Rodilla al día siguiente: 2/10'));
+ await p.evaluate(summary=>{const k='entreno_v7_semana_2026-10-26',data=JSON.parse(localStorage.getItem(k));delete data.tue_executionDate;data._summary=summary;data._summaryDay='tue';localStorage.setItem(k,JSON.stringify(data));},savedSummary);
+ await p.reload();await p.locator('#gen').click();record('Recuperar fecha de un resumen anterior a la actualización',(await p.locator('#output').innerText()).includes(before));
+ await p.locator('[data-tab="thu"]').click();
+ await p.evaluate(()=>{const root=document.querySelector('#day_thu');root.querySelectorAll('[data-k]').forEach(el=>{if(el.type==='checkbox')return;el.value=el.dataset.num?'1':'Prueba';el.dispatchEvent(new Event('input',{bubbles:true}))});root.querySelectorAll('[data-scale]').forEach(el=>el.querySelector('[data-v="0"]').click())});
+ await p.locator('[data-k="thu_tread_time"]').fill('0');await p.locator('[data-k="thu_tread_distance"]').fill('3');await p.locator('#gen').click();record('Cinta rechaza distancia positiva con cero minutos',!(await p.locator('#output').isVisible())&&(await p.locator('#status').innerText()).includes('Cinta: hay distancia'));
+ await p.locator('[data-k="thu_tread_time"]').fill('30');await p.locator('[data-k="thu_bike_time"]').fill('0');await p.locator('[data-k="thu_bike_distance"]').fill('2');await p.locator('#gen').click();record('Bici rechaza distancia positiva con cero minutos',!(await p.locator('#output').isVisible())&&(await p.locator('#status').innerText()).includes('Bici: hay distancia'));
+ await p.locator('[data-k="thu_bike_skip"]').check();await p.locator('[data-k="thu_bike_reason"]').fill('Omitida por rodilla');await p.locator('#gen').click();const thuSummary=await p.locator('#output').innerText();record('Bici omitida ignora datos antiguos y cada sesión conserva su fecha',(await p.locator('#output').isVisible())&&thuSummary.includes('miércoles, 28 de octubre de 2026')&&!thuSummary.includes(before)&&thuSummary.includes('Omitida: Omitida por rodilla'));
+ await p.locator('[data-k="thu_tread_time"]').fill('0');await p.locator('[data-k="thu_tread_distance"]').fill('0');await p.locator('#gen').click();record('Cero tiempo y cero distancia siguen permitidos',await p.locator('#output').isVisible());
+
  }finally{await b.close()}
 }
 (async()=>{

@@ -396,6 +396,11 @@ const DAYS=[
 let storageProblem="";
 function loadState(){try{const raw=localStorage.getItem(STORE);const x=JSON.parse(raw||"{}");if(!x||typeof x!=="object"||Array.isArray(x))throw Error();return x}catch(e){storageProblem="No se han podido leer los datos guardados. Los datos anteriores no se borran hasta que registres cambios.";return {}}}
 const state=loadState();
+// Recupera la fecha de un resumen ya guardado antes de invalidarlo al abrir.
+if(DAYS.some(d=>d.id===state._summaryDay)&&typeof state._summary==="string"){
+ const savedDate=state._summary.match(/^Realizada: ([^\r\n]+)$/m),key=state._summaryDay+"_executionDate";
+ if(savedDate&&!state[key])state[key]=savedDate[1];
+}
 const $=(s,p=document)=>p.querySelector(s), $$=(s,p=document)=>[...p.querySelectorAll(s)];
 function save(){try{localStorage.setItem(STORE,JSON.stringify(state))}catch(e){storageProblem="No se pudo guardar en este navegador. Copia el resumen antes de salir.";toast(storageProblem)}}
 
@@ -536,15 +541,21 @@ function validateDay(id){
   if(k==="fri_parallel_t1"&&val("fri_parallel_decision")!=="support")return;
   const v=val(k);if(v!==""&&(!Number.isFinite(num(v))||num(v)<0||((k.endsWith("_eb")||k.endsWith("_ea"))&&num(v)>10)||(k==="tue_blocks"&&(!Number.isInteger(num(v))||num(v)>6))||(/_r[123]$/.test(k)&&!Number.isInteger(num(v)))))misses.push("Valor inválido: "+k.replaceAll('_',' '));
  });
+ const cardioPairs=id==="tue"?[["tue_time","tue_distance","Cardio A"]]:id==="thu"&&val("thu_rest_skip")!==true?
+  [["thu_tread_time","thu_tread_distance","Cinta"],...(val("thu_bike_skip")===true?[]:[["thu_bike_time","thu_bike_distance","Bici"]])]:[];
+ cardioPairs.forEach(([time,distance,label])=>{if(num(val(distance))>0&&num(val(time))===0)misses.push(label+": hay distancia registrada, pero el tiempo es 0 min. Revisa el tiempo antes de generar el resumen.")});
  return misses;
 }
 
 function fmtNum(x){return String(x).replace(".",",")}
-function executionDate(){
- const d=new Date();
- return d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+function executionDate(id){
+ const key=id+"_executionDate";
+ if(typeof state[key]!=="string"||!state[key].trim()){
+  state[key]=new Date().toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+ }
+ return state[key];
 }
-function summaryHeader(d){return `${WEEK}\n${d.session||d.title}\nRealizada: ${executionDate()}\n`;}
+function summaryHeader(d){return `${WEEK}\n${d.session||d.title}\nRealizada: ${executionDate(d.id)}\n`;}
 function summaryStrength(d){
  let s=summaryHeader(d)+"\nCALENTAMIENTO\nSensaciones tras calentamiento: "+val(d.id+"_warm")+"\n";
  if(d.id==="wed")s+=`Rodilla antes: ${val("wed_pre_knee")}/10\nLumbar antes: ${val("wed_pre_lumbar")}/10\n`;
