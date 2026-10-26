@@ -69,3 +69,14 @@ Los dos fallos se reprodujeron en el script y quedaron pendientes de aprobación
 - **PASS:** 28 comprobaciones de Chromium, incluidas las dos regresiones, persistencia de fecha, recuperación de fecha anterior, fecha independiente por sesión, cinta, bici y omisiones.
 - **NO EJECUTADO:** WebKit y Safari real.
 - No cambian prescripciones, distribución visual, campos de entrenamiento ni la clave semanal.
+
+
+## Rutina final del 26–30 de octubre: V7.1
+
+- Lunes: aproximación de bíceps y prueba de 10 kg en S2 (6–8 reps), con S1 a 8 kg × 12 y S3 a 8 kg × 10–12. Rango 6–12; RIR 2–3 y precauciones del salto del 25 %. Viernes: 8 kg y aviso de no repetir la prueba.
+- Paralelas lunes y viernes: familiarización de 15–20 s con pies apoyados, sin carga completa, sin descensos ni fondos dinámicos. Campos solicitados de tiempo, tipo de apoyo, asistencia y molestias/aprensión 0–10; sin RIR ficticio ni series extra de tríceps.
+- Los resultados de un apoyo cargado de la versión anterior se mantienen guardados y se muestran como registro anterior. Los campos de familiarización son distintos para no reclasificar una ejecución antigua como pies apoyados. La opción antigua de apoyo cargado requiere seleccionar de nuevo una opción válida.
+- Nuevos campos: rodilla antes de correr, durante prensa, después de cuádriceps y hombro durante flexiones. Se validan y exportan; no se completan automáticamente con cero.
+- Se actualizan calentamientos, rango de gemelos del miércoles (10–16), anteriores de cardio y precauciones de la versión final. Misma semana y clave de almacenamiento. Se conservan las correcciones aprobadas de fecha y tiempo/distancia.
+- **PASS:** 32 comprobaciones en Chromium, incluidas fidelidad de la prueba de bíceps, formularios de familiarización, nuevas molestias y conservación de registros anteriores. Revisión visual de las tarjetas de bíceps y paralelas en ancho de 390 px.
+- **NO EJECUTADO:** WebKit y Safari real.
