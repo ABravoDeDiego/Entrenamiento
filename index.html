@@ -24,7 +24,7 @@ input[data-num]{font-size:17px;text-align:center}.skip{display:flex;align-items:
 </head>
 <body>
 <main>
-<div class="week"><h1>SEMANA 26 — 30 OCTUBRE 2026</h1><p>V7.1 · fuerza funcional + resistencia · inicio del plan de carrera · 3 fuerza + 2 cardio + sueño</p></div>
+<div class="week"><h1>SEMANA 26 — 30 OCTUBRE 2026</h1><p>V7.2 · fuerza funcional + resistencia · inicio del plan de carrera · 3 fuerza + 2 cardio + sueño</p></div>
 <div class="tabs" id="tabs"></div>
 <div class="card"><div class="meta">RIR habitual 2–3 · descanso superseries 90–120 s · series exigentes 2–3 min. Mancuernas: peso por mancuerna. Las aproximaciones no cuentan.</div><div class="meta">Prioridades: ausencia de dolor, progresión sostenible, adaptación gradual al impacto, técnica y estabilidad. No compensar sesiones perdidas.</div><div class="meta muted">Sábado 31 y domingo 1: descanso o paseo suave opcional. Vigilar respuesta de rodilla tras la primera sesión de carrera.</div></div><div id="days"></div>
 <div class="section" id="summaryTitle">RESUMEN PARA EL DIARIO</div>
@@ -407,6 +407,8 @@ const DAYS=[
 let storageProblem="";
 function loadState(){try{const raw=localStorage.getItem(STORE);const x=JSON.parse(raw||"{}");if(!x||typeof x!=="object"||Array.isArray(x))throw Error();return x}catch(e){storageProblem="No se han podido leer los datos guardados. Los datos anteriores no se borran hasta que registres cambios.";return {}}}
 const state=loadState();
+// Conserva las omisiones explícitas de paralelas de la versión anterior.
+for(const d of DAYS)for(const e of d.ex||[]){const id=e[7];if(e[5]==="parallel"&&state[id+"_decision"]==="omit"&&typeof state[id+"_omit"]!=="boolean")state[id+"_omit"]=true}
 // Recupera la fecha de un resumen ya guardado antes de invalidarlo al abrir.
 if(DAYS.some(d=>d.id===state._summaryDay)&&typeof state._summary==="string"){
  const savedDate=state._summary.match(/^Realizada: ([^\r\n]+)$/m),key=state._summaryDay+"_executionDate";
@@ -437,15 +439,17 @@ function metric(k,label,unit){return `<div class="label">${label}</div>${input(k
 function skipControl(k,label){return `<label class="skip"><input type="checkbox" data-k="${k}_skip" ${val(k+'_skip')===true?'checked':''}> ${label}</label><div class="label">Motivo si se omite</div>${comment(k+'_reason')}`}
 function dayStart(d){return `<div class="day" id="day_${d.id}" data-day="${d.id}"><div class="dayhead"><h2>${d.title}</h2><div class="progress"></div></div>`}
 
+function exerciseOmit(id){return `<label class="skip"><input type="checkbox" data-omit="${id}" data-k="${id}_omit" ${val(id+"_omit")===true?'checked':''}> Omitir ejercicio</label>`}
+function exerciseSkipped(id){return val(id+"_omit")===true||((id==="fri_press"||id==="fri_curl")&&val("fri_legs_skip")===true)}
 function exerciseScales(id){return id==="wed_press"?[[id+"_knee","Rodilla durante"]]:id==="wed_quad"?[[id+"_knee","Rodilla durante"],[id+"_knee_after","Rodilla después"]]:id==="fri_pushup"?[[id+"_shoulder_during","Hombro durante"]]:[]}
 function renderExercise(e){
  const [sec,n,r,p,t,type,sets,id,note]=e;let rows="";
- if(type==="parallel")return `<div class="card exercise" data-ex="${id}" data-type="parallel" data-sets="1"><h3>${n}<span class="complete"></span></h3><div class="meta">🎯 ${r}</div><div class="meta muted"><b>Anterior:</b> ${p}</div><div class="target">${t}</div><div class="note">${note}</div>${val(id+"_t1")!==""?`<div class="meta muted">Registro guardado de la versión anterior (apoyo estático): ${esc(val(id+"_t1"))} s · asistencia: ${esc(val(id+"_assist"))||"—"} · molestias/aprensión: ${esc(val(id+"_apprehension"))||"—"}. No se convierte en familiarización con pies apoyados.</div>`:""}<div class="label">Decisión</div><select data-k="${id}_decision"><option value="">Selecciona…</option><option value="omit">Omitido</option><option value="familiar">Familiarización con pies apoyados, sin carga completa</option></select><div data-familiar="${id}"><div class="label">Tiempo</div>${input(id+"_fam_time","number","s")}<div class="label">Tipo de apoyo</div>${input(id+"_fam_type","text")}<div class="label">Asistencia</div>${input(id+"_fam_assist","text")}<div class="label">Molestias / aprensión /10</div>${scale(id+"_fam_apprehension")}</div><div class="label">Comentarios</div>${comment(id+"_c")}</div>`;
+ if(type==="parallel")return `<div class="card exercise" data-ex="${id}" data-type="parallel" data-sets="1"><h3>${n}<span class="complete"></span></h3>${exerciseOmit(id)}<div class="meta">🎯 ${r}</div><div class="meta muted"><b>Anterior:</b> ${p}</div><div class="target">${t}</div><div class="note">${note}</div>${val(id+"_t1")!==""?`<div class="meta muted">Registro guardado de la versión anterior (apoyo estático): ${esc(val(id+"_t1"))} s · asistencia: ${esc(val(id+"_assist"))||"—"} · molestias/aprensión: ${esc(val(id+"_apprehension"))||"—"}. No se convierte en familiarización con pies apoyados.</div>`:""}<div data-familiar="${id}"><div class="label">Tiempo</div>${input(id+"_fam_time","number","s")}<div class="label">Tipo de apoyo</div>${input(id+"_fam_type","text")}<div class="label">Asistencia</div>${input(id+"_fam_assist","text")}<div class="label">Molestias / aprensión /10</div>${scale(id+"_fam_apprehension")}</div><div class="label">Comentarios</div>${comment(id+"_c")}</div>`;
  for(let i=1;i<=sets;i++){
   const label=id==="wed_side"?(i===1?"Izq.":"Der."):"S"+i;
   rows+=`<div class="row"><div class="sl">${label}</div>`+(type==="weight"?input(id+"_w"+i,"number","kg")+input(id+"_r"+i,"number","reps"):type==="body"?`<div class="muted">Peso corporal</div>`+input(id+"_r"+i,"number","reps"):`<div style="grid-column:2/4">${input(id+"_t"+i,"number","s")}</div>`)+`</div>`;
  }
- return `<div class="card exercise" data-ex="${id}" data-type="${type}" data-sets="${sets}"><h3>${n}<span class="complete"></span></h3><div class="meta">🎯 <b>Rango:</b> ${r}</div><div class="meta muted"><b>Anterior:</b> ${p}</div><div class="target">➡️ Objetivo sesión: ${t}</div>${note?`<div class="note">${note}</div>`:""}<div class="head"><div>${id==="wed_side"?"Lado":"Serie"}</div><div>${type==="time"?"Tiempo":"Peso"}</div><div>${type==="time"?"":"Reps"}</div></div>${rows}${rir(id)}${exerciseScales(id).map(([key,label])=>`<div class="label">${label} /10</div>${scale(key)}`).join("")}<div class="label">Comentarios</div>${comment(id+"_c")}</div>`;
+ return `<div class="card exercise" data-ex="${id}" data-type="${type}" data-sets="${sets}"><h3>${n}<span class="complete"></span></h3>${exerciseOmit(id)}<div class="meta">🎯 <b>Rango:</b> ${r}</div><div class="meta muted"><b>Anterior:</b> ${p}</div><div class="target">➡️ Objetivo sesión: ${t}</div>${note?`<div class="note">${note}</div>`:""}<div class="head"><div>${id==="wed_side"?"Lado":"Serie"}</div><div>${type==="time"?"Tiempo":"Peso"}</div><div>${type==="time"?"":"Reps"}</div></div>${rows}${rir(id)}${exerciseScales(id).map(([key,label])=>`<div class="label">${label} /10</div>${scale(key)}`).join("")}<div class="label">Comentarios</div>${comment(id+"_c")}</div>`;
 }
 
 function closing(day){
@@ -498,10 +502,9 @@ function cardioReq(mode){
 }
 function exMissing(card){
  const id=card.dataset.ex,type=card.dataset.type,sets=+card.dataset.sets,m=[];
- if((id==="fri_press"||id==="fri_curl")&&val("fri_legs_skip")===true)return [];
+ if(exerciseSkipped(id))return [];
  if(type==="parallel"){
-  const decision=val(id+"_decision");if(!["omit","familiar"].includes(decision))m.push("decisión: omitido o familiarización con pies apoyados");
-  if(decision==="familiar"){
+  {
    if(val(id+"_fam_time")==="")m.push("tiempo");
    if(!String(val(id+"_fam_type")).trim())m.push("tipo de apoyo");
    if(!String(val(id+"_fam_assist")).trim())m.push("asistencia");
@@ -529,9 +532,9 @@ function refresh(){
  $("#summaryTitle").textContent=active==="sleep"?"RESUMEN DE SUEÑO":"RESUMEN PARA EL DIARIO";$("#gen").textContent=active==="sleep"?"Generar sueño":"Generar día";
  if(active==="sleep")$("#sleepProgress").textContent=["sunmon","montue","tuewed","wedthu","thufri","frisat","satsun"].filter(k=>val("sleep_"+k)!=="").length+"/7 noches registradas";
  else if(DAYS.find(d=>d.id===active).type==="strength"){
-  const cards=$$(".exercise",day);let done=0;cards.forEach(c=>{const skipped=(c.dataset.ex==="fri_press"||c.dataset.ex==="fri_curl")&&val("fri_legs_skip")===true;const ok=exMissing(c).length===0;c.classList.toggle("done",ok);$(".complete",c).textContent=skipped?" · Omitido":ok?" ✓ Completado":"";if(ok)done++;$$("input,textarea,button",c).forEach(el=>el.disabled=skipped)});$(".progress",day).textContent=`${done}/${cards.length} ejercicios`;
+  const cards=$$(".exercise",day);let done=0;cards.forEach(c=>{const skipped=exerciseSkipped(c.dataset.ex);const ok=exMissing(c).length===0;c.classList.toggle("done",ok);$(".complete",c).textContent=skipped?" · Omitido":ok?" ✓ Completado":"";if(ok)done++;$$("input,textarea,button,select",c).forEach(el=>{if(el.hasAttribute("data-omit")||el.dataset.k===c.dataset.ex+"_c")el.disabled=false;else el.disabled=skipped})});$(".progress",day).textContent=`${done}/${cards.length} ejercicios`;
  }else $(".progress",day).textContent=validateDay(active).length?"Registro pendiente":"Registro completo";
- $$("[data-familiar]").forEach(el=>el.hidden=val(el.dataset.familiar+"_decision")!=="familiar");
+ $$("[data-familiar]").forEach(el=>el.hidden=exerciseSkipped(el.dataset.familiar));
  const ts=$("[data-thu-session]");if(ts)ts.hidden=val("thu_rest_skip")===true;
  $$("[data-speed]").forEach(el=>el.textContent=speed(el.dataset.speed)+" km/h");
 }
@@ -577,8 +580,8 @@ function summaryStrength(d){
  let s=summaryHeader(d)+"\nCALENTAMIENTO\nSensaciones tras calentamiento: "+val(d.id+"_warm")+"\n";
  if(d.id==="wed")s+=`Rodilla antes: ${val("wed_pre_knee")}/10\nLumbar antes: ${val("wed_pre_lumbar")}/10\n`;
  let sec="";d.ex.forEach(e=>{const [group,n,r,p,t,type,sets,id]=e;if(group!==sec){sec=group;s+="\n"+group+"\n"}
-  if((id==="fri_press"||id==="fri_curl")&&val("fri_legs_skip")===true){s+=`- ${n}: Omitido · ${val("fri_legs_reason")}\n`;return}
-  if(type==="parallel"){s+=`- ${n}: `+(val(id+"_decision")==="omit"?"Omitido":`Familiarización con pies apoyados, sin carga completa · ${val(id+"_fam_time")} s\n  Tipo de apoyo: ${val(id+"_fam_type")}\n  Asistencia: ${val(id+"_fam_assist")}\n  Molestias/aprensión: ${val(id+"_fam_apprehension")}/10`)+"\n"}
+  if(exerciseSkipped(id)){s+=`- ${n}: Omitido${(id==="fri_press"||id==="fri_curl")&&val("fri_legs_skip")===true&&val("fri_legs_reason")?" · "+val("fri_legs_reason"):""}\n`;if(val(id+"_c"))s+=`  Comentarios: ${val(id+"_c")}\n`;return}
+  if(type==="parallel"){s+=`- ${n}: Familiarización con pies apoyados, sin carga completa · ${val(id+"_fam_time")} s\n  Tipo de apoyo: ${val(id+"_fam_type")}\n  Asistencia: ${val(id+"_fam_assist")}\n  Molestias/aprensión: ${val(id+"_fam_apprehension")}/10\n`}
   else{
    const arr=[];for(let i=1;i<=sets;i++)arr.push(type==="weight"?`${fmtNum(val(id+"_w"+i))} kg - ${val(id+"_r"+i)} reps`:type==="body"?`Peso corporal - ${val(id+"_r"+i)} reps`:`${id==="wed_side"?(i===1?"Izquierda: ":"Derecha: "):""}${val(id+"_t"+i)} s`);
    s+=`- ${n}: ${arr.join(" / ")}\n  RIR: ${val(id+"_rir")!==""?val(id+"_rir"):"No realizado"}\n`;

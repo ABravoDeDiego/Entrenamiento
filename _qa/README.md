@@ -80,3 +80,15 @@ Los dos fallos se reprodujeron en el script y quedaron pendientes de aprobación
 - Se actualizan calentamientos, rango de gemelos del miércoles (10–16), anteriores de cardio y precauciones de la versión final. Misma semana y clave de almacenamiento. Se conservan las correcciones aprobadas de fecha y tiempo/distancia.
 - **PASS:** 32 comprobaciones en Chromium, incluidas fidelidad de la prueba de bíceps, formularios de familiarización, nuevas molestias y conservación de registros anteriores. Revisión visual de las tarjetas de bíceps y paralelas en ancho de 390 px.
 - **NO EJECUTADO:** WebKit y Safari real.
+
+
+## V7.2 — Omisión por ejercicio (30 de octubre de 2026)
+
+Solicitud aprobada: un checkbox «Omitir ejercicio» por tarjeta, con comentario opcional. Se mantiene la prescripción de V7.1 y la clave semanal.
+
+- Marcar el checkbox excluye de validación las series, el RIR y las molestias específicas de ese ejercicio, incluidos valores antiguos inválidos. Los campos se desactivan sin borrar sus datos; el checkbox y los comentarios siguen activos.
+- El resumen muestra «Omitido» y el comentario solo si se escribió. No exporta las antiguas series como realizadas. Al desmarcar, se recuperan los valores y vuelven sus validaciones.
+- Los campos vacíos por sí solos no significan omisión. El calentamiento y el cierre de sesión mantienen sus comprobaciones.
+- Paralelas usa el mismo checkbox en lugar del selector anterior de omisión. Las omisiones explícitas anteriores se conservan; una opción antigua de apoyo cargado no se convierte en familiarización realizada.
+- **PASS:** 37 comprobaciones en Chromium. Nuevas pruebas de omisión con campos vacíos en peso corporal, cargas, tiempos, molestias y familiarización; comentario opcional; persistencia; restauración de datos/RIR; exclusión de valores inválidos; cierre obligatorio y migración de omisiones.
+- **NO EJECUTADO:** WebKit y Safari real.
