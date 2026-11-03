@@ -24,7 +24,7 @@ El script abre un servidor local temporal con el HTML y crea contextos de navega
 
 Si el entorno ya tiene Chromium, se puede indicar su ruta con `QA_CHROMIUM_EXECUTABLE`. No se incluyen navegadores ni dependencias en el repositorio.
 
-Las comprobaciones de fidelidad de series están fijadas para la semana 26–30 de octubre de 2026: deben actualizarse desde la nueva prescripción, nunca copiarse automáticamente del HTML a comprobar. La revisión textual completa de cargas y precauciones sigue siendo necesaria.
+Las comprobaciones vigentes de fidelidad de series están fijadas para la semana 2–6 de noviembre de 2026: deben actualizarse desde la nueva prescripción, nunca copiarse automáticamente del HTML a comprobar. Las revisiones anteriores están conservadas en el historial de Git. La revisión textual completa de cargas y precauciones sigue siendo necesaria.
 
 ## Qué comprobar
 
@@ -91,4 +91,18 @@ Solicitud aprobada: un checkbox «Omitir ejercicio» por tarjeta, con comentario
 - Los campos vacíos por sí solos no significan omisión. El calentamiento y el cierre de sesión mantienen sus comprobaciones.
 - Paralelas usa el mismo checkbox en lugar del selector anterior de omisión. Las omisiones explícitas anteriores se conservan; una opción antigua de apoyo cargado no se convierte en familiarización realizada.
 - **PASS:** 37 comprobaciones en Chromium. Nuevas pruebas de omisión con campos vacíos en peso corporal, cargas, tiempos, molestias y familiarización; comentario opcional; persistencia; restauración de datos/RIR; exclusión de valores inválidos; cierre obligatorio y migración de omisiones.
+- **NO EJECUTADO:** WebKit y Safari real.
+
+
+## V8 — Semana 2–6 de noviembre de 2026
+
+- Nueva clave `entreno_v8_semana_2026-11-02`, sin borrar ni copiar resultados de octubre. La exportación conserva la fecha del primer resumen válido.
+- Programación cotejada: ocho ejercicios en A, nueve en B y diez en C. Todos mantienen el checkbox de omisión con comentarios opcionales.
+- Prensa B: aunque la plantilla enumera hasta tres series, el objetivo limita a un máximo de dos a 40 kg; solo se muestran dos campos y el resumen indica S3 omitida por programación. La segunda es condicional, al igual que las series indicadas de curl femoral, hip thrust, abductores y piernas C.
+- Series condicionales: ambos campos vacíos equivalen a omitida, con identificación expresa en la salida. Si se rellena uno, el otro es obligatorio. No se inventan ceros, pesos ni repeticiones. Si todo el ejercicio se omite, se usa su checkbox.
+- Cierres de fuerza: hombro, rodilla derecha, rodilla izquierda y lumbar independientes. Miércoles: rodilla derecha antes; prensa y extensión de cuádriceps: rodilla durante y después.
+- Carrera: campos de bloques, total, distancia, tiempo trotando, esfuerzo y rodilla antes/durante/después, con seguimiento opcional a las 24 h. No se exigen los antiguos registros individuales de tiempo de calentamiento y vuelta a la calma.
+- Jueves: bici 10–20 min o caminata cómoda en llano 20–30 min, mediante un único selector y un único registro. No se exige completar ambas opciones ni se prescribe cinta inclinada. Se mantiene el descanso por evolución de rodilla.
+- Paralelas: solo aviso de no hacer bajadas ni fondos, pendiente de valoración profesional. No hay formulario de ejecución esta semana.
+- **PASS:** 24 comprobaciones en Chromium: arranque, fidelidad, campos vacíos, registros separados de rodillas, exportación/copia/recarga, carrera, series condicionales completas y omitidas, omisiones/restauración, alternativas del jueves, fecha a las 24 h, sueño, borrado limitado a noviembre, almacenamiento inválido y presentación móvil de 390 px. Revisión visual adicional de prensa B y cardio B.
 - **NO EJECUTADO:** WebKit y Safari real.

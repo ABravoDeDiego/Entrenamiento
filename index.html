@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f6f8">
-<title>Entrenamiento · Semana 26–30 octubre 2026</title>
+<title>Entrenamiento · Semana 2–6 noviembre 2026</title>
 <style>
 *{box-sizing:border-box} :root{--bg:#f5f6f8;--card:#fff;--text:#17191d;--muted:#6d737c;--line:#e2e5e9;--soft:#eef1f4;--ok:#e9f7ee;--warn:#fff4df;--danger:#fdeaea}
 body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -24,9 +24,9 @@ input[data-num]{font-size:17px;text-align:center}.skip{display:flex;align-items:
 </head>
 <body>
 <main>
-<div class="week"><h1>SEMANA 26 — 30 OCTUBRE 2026</h1><p>V7.2 · fuerza funcional + resistencia · inicio del plan de carrera · 3 fuerza + 2 cardio + sueño</p></div>
+<div class="week"><h1>SEMANA 2 — 6 NOVIEMBRE 2026</h1><p>V8 · fuerza funcional + resistencia · retorno progresivo a la carrera · 3 fuerza + 2 cardio + sueño</p></div>
 <div class="tabs" id="tabs"></div>
-<div class="card"><div class="meta">RIR habitual 2–3 · descanso superseries 90–120 s · series exigentes 2–3 min. Mancuernas: peso por mancuerna. Las aproximaciones no cuentan.</div><div class="meta">Prioridades: ausencia de dolor, progresión sostenible, adaptación gradual al impacto, técnica y estabilidad. No compensar sesiones perdidas.</div><div class="meta muted">Sábado 31 y domingo 1: descanso o paseo suave opcional. Vigilar respuesta de rodilla tras la primera sesión de carrera.</div></div><div id="days"></div>
+<div class="card"><div class="meta">RIR habitual 2–3 · descanso superseries 90–120 s · series exigentes 2–3 min. Mancuernas: peso por mancuerna. Las aproximaciones no cuentan.</div><div class="meta">Prioridades: ausencia de dolor. Rodilla derecha: comprobar respuesta durante y 24 h después. Consolidar cargas, sin aumentos en piernas. No compensar sesiones perdidas. Si reaparece dolor de rodilla, suspender carrera y ejercicios que lo provoquen. Paralelas: sin bajadas dinámicas ni fondos hasta valoración profesional de estabilidad.</div><div class="meta muted">Sábado 7 y domingo 8: descanso, paseos suaves opcionales. Revisar respuesta de rodilla 24 h después de correr y entrenar piernas. Siguiente semana: sin molestias, consolidar; si son recurrentes, reducir o suspender impacto y revisar rodilla. No aumentar distancia y velocidad simultáneamente ni progresar por una única sesión buena.</div></div><div id="days"></div>
 <div class="section" id="summaryTitle">RESUMEN PARA EL DIARIO</div>
 <div class="card"><div id="status" class="status"></div><div id="output" class="output"></div></div>
 </main>
@@ -34,36 +34,36 @@ input[data-num]{font-size:17px;text-align:center}.skip{display:flex;align-items:
 <div class="toast" id="toast"></div>
 
 <script>
-const WEEK="SEMANA 26 — 30 OCTUBRE 2026";
-const STORE="entreno_v7_semana_2026-10-26";
+const WEEK="SEMANA 2 — 6 NOVIEMBRE 2026";
+const STORE="entreno_v8_semana_2026-11-02";
 const RIRS=[0,1,2,3,"4+"];
 
 const DAYS=[
   {
     "id": "mon",
     "tab": "Lun · A",
-    "title": "LUNES 26 — FUERZA A · GIMNASIO",
+    "title": "LUNES 2 — FUERZA A · GIMNASIO",
     "session": "FUERZA A · GIMNASIO",
     "type": "strength",
-    "warm": "<ol class=\"steps\"><li>5–7 min cinta a 5–5,5 km/h.</li><li>Movilidad de hombros y escápulas.</li><li>Aproximaciones ligeras de press.</li><li>Aproximación ligera de bíceps.</li></ol>",
+    "warm": "<ol class=\"steps\"><li>5–7 min caminata cómoda, llano, 5–5,5 km/h.</li><li>Movilidad suave de hombros y escápulas.</li><li>Aproximaciones de press, sin contarlas.</li></ol>",
     "ex": [
       [
         "SUPER SERIE 1",
         "Press pecho · Máquina",
         "3 series · 8–12 reps",
-        "20 kg - 12 / 25 kg - 9 / 20 kg - 11 · RIR 3",
-        "20 kg - 12 / 25 kg - 9–10 / 20 kg - 11–12",
+        "20 kg - 12 / 25 kg - 10 / 20 kg - 9 · RIR 2",
+        "20 kg - 12 / 25 kg - 9–10 / 20 kg - 10–12",
         "weight",
         3,
         "mon_chest",
-        "Sin llegar al fallo."
+        ""
       ],
       [
         "SUPER SERIE 1",
         "Pull-over · Polea",
         "3 series · 9–12 reps",
-        "15 kg - 12 / 17,5 kg - 9 / 15 kg - 12 · RIR 3",
-        "15 kg - 12 / 17,5 kg - 9–10 / 15 kg - 12",
+        "15 kg - 12 / 17,5 kg - 10 / 10 kg - 11 · RIR 2",
+        "15 kg - 12 / 17,5 kg - 10–12 / 15 kg - 9–12, si técnica y hombro lo permiten",
         "weight",
         3,
         "mon_pull",
@@ -72,42 +72,31 @@ const DAYS=[
       [
         "SUPER SERIE 2",
         "Curl bíceps · Mancuernas",
-        "3 series · 6–12 reps",
-        "8 kg - 12 / 8 kg - 12 / 8 kg - 12 · RIR 3",
-        "8 kg - 12 / 10 kg - 6–8 (PRUEBA) / 8 kg - 10–12 · RIR objetivo 2–3.",
+        "3 series · 10–12 reps",
+        "8 kg - 12 / 10 kg - 10 / 8 kg - 12 · RIR 3",
+        "Repetir 8 kg - 12 / 10 kg - 10 / 8 kg - 12",
         "weight",
         3,
         "mon_bic",
-        "El salto de 8 a 10 kg es del 25 %. No balancear el cuerpo ni compensar con los hombros. Si no se mantiene la técnica, detener la prueba."
+        ""
       ],
       [
         "SUPER SERIE 2",
         "Tríceps · Polea",
         "2 series · 10–12 reps",
-        "12,5 kg - 12 / 10 kg - 12 · RIR 3",
-        "12,5 kg - 12 / 10 kg - 12",
+        "12,5 kg - 12 / 10 kg - 12 · RIR 2",
+        "Repetir ambas series: 12,5 kg - 12 / 10 kg - 12",
         "weight",
         2,
         "mon_tri",
         ""
       ],
       [
-        "SUPER SERIE 2",
-        "Paralelas · Familiarización",
-        "1 bloque · 15–20 s",
-        "20 s soportando el peso corporal. Sin dolor ni aprensión.",
-        "1 bloque de 15–20 s de colocación, agarre y control escapular. Sin descensos.",
-        "parallel",
-        1,
-        "mon_parallel",
-        "Antecedentes de subluxaciones. No realizar fondos dinámicos. Hasta valoración profesional de estabilidad, familiarización con pies apoyados, sin carga completa."
-      ],
-      [
         "SUPER SERIE 3",
         "Elevaciones laterales · Mancuernas",
         "3 series · 10–13 reps",
-        "Fuerza A: 6 kg - 13 / 7,5 kg - 10 / 6 kg - 11. Último en casa: 6 kg - 12 / 6 kg - 13 · RIR 3",
-        "6 kg - 12–13 en las tres series",
+        "6 kg - 12 / 7,5 kg - 10 / 6 kg - 12 · RIR 3",
+        "Repetir 6 kg - 12 / 7,5 kg - 10 / 6 kg - 12, sin subir carga",
         "weight",
         3,
         "mon_lat",
@@ -117,19 +106,19 @@ const DAYS=[
         "SUPER SERIE 3",
         "Rotación externa · Mancuernas",
         "3 series · 10–12 reps",
-        "2,5 kg - 12 / 3 kg - 12 / 3 kg - 10 · RIR 2",
-        "2,5 kg - 12 / 3 kg - 10–12 / 3 kg - 10–12",
+        "2,5 kg - 12 / 3 kg - 10 / 3 kg - 10 · RIR 2",
+        "Repetir 2,5 kg - 12 / 3 kg - 10 / 3 kg - 10; técnica lenta y controlada",
         "weight",
         3,
         "mon_rot",
-        "Movimiento controlado."
+        ""
       ],
       [
         "CORE",
         "Plancha frontal",
         "2 series · tiempo",
-        "60 / 65 s · RIR 4+",
-        "60 / 65–70 s",
+        "60 / 70 s · RIR 1",
+        "60 / 60–65 s, RIR 2–3",
         "time",
         2,
         "mon_plank",
@@ -139,102 +128,104 @@ const DAYS=[
         "CORE",
         "Crunch · Banco inclinado",
         "2 series · 10–12 reps",
-        "5 kg - 10 / 5 kg - 10 · RIR 3",
-        "5 kg - 10–12 en ambas series",
+        "5 kg - 12 / 5 kg - 10 · RIR 2",
+        "5 kg - 12 / 5 kg - 10–12",
         "weight",
         2,
         "mon_crunch",
         ""
       ]
-    ]
+    ],
+    "parallelNote": "No realizar fondos ni descensos. Pendiente de valoración profesional de estabilidad de hombros."
   },
   {
     "id": "tue",
     "tab": "Mar · Carrera",
-    "title": "MARTES 27 — CARDIO A · CARRERA CALLE",
-    "session": "CARDIO A · CARRERA CALLE · SEMANA 1 DE VUELTA A CORRER",
+    "title": "MARTES 3 — CARDIO A · CALLE",
+    "session": "CARDIO A · CALLE · RETORNO PROGRESIVO A LA CARRERA",
     "type": "runwalk"
   },
   {
     "id": "wed",
     "tab": "Mié · B",
-    "title": "MIÉRCOLES 28 — FUERZA B · GIMNASIO",
+    "title": "MIÉRCOLES 4 — FUERZA B · GIMNASIO",
     "session": "FUERZA B · GIMNASIO",
     "type": "strength",
-    "warm": "<ol class=\"steps\"><li>5–7 min caminando suave.</li><li>Movilidad de cadera y tobillos.</li><li>Aproximaciones ligeras de rumano, prensa y extensiones de cuádriceps.</li><li>Si existe dolor residual tras correr, reducir o posponer trabajo de piernas.</li></ol>",
+    "condition": "Realizar la sesión de piernas únicamente si la rodilla está sin molestias y no ha empeorado tras el cardio. Si reaparece dolor, omitir ejercicios que lo provoquen. No progresar cargas esta semana.",
+    "warm": "<ol class=\"steps\"><li>5–7 min caminata cómoda, llano.</li><li>Movilidad suave de cadera y tobillo.</li><li>Aproximaciones ligeras para los ejercicios de piernas.</li></ol>",
     "ex": [
       [
-        "SUPER SERIE 1",
+        "BLOQUE 1 — CADENA POSTERIOR",
         "Peso muerto rumano · Mancuernas",
         "3 series · 12 reps",
-        "10 kg - 12 en las tres series · RIR 3",
-        "10 kg - 12 en las tres series",
+        "Última realizada: 10 kg - 12/12/12 · RIR 3. 28/10: omitido por rodilla.",
+        "10 kg - 12/12/12, solo si completamente indoloro",
         "weight",
         3,
         "wed_rdl",
-        "Mantener carga para pulir técnica."
+        ""
       ],
       [
-        "SUPER SERIE 1",
+        "BLOQUE 1 — CADENA POSTERIOR",
         "Curl femoral · Máquina",
         "2 series · 10–12 reps",
-        "30 kg - 12 / 30 kg - 12 / 35 kg - 12 · RIR 3",
-        "30 kg - 12 / 35 kg - 10–12",
+        "Última realizada: 30 kg - 12 / 30 kg - 12 / 35 kg - 12. 28/10: omitido por rodilla.",
+        "Empezar con 25–30 kg, 10–12 reps; segunda serie solo si no molesta",
         "weight",
         2,
         "wed_curl",
-        "Una serie menos para incorporar extensiones de cuádriceps."
+        ""
       ],
       [
         "BLOQUE 2 — CUÁDRICEPS Y GEMELOS",
         "Prensa de piernas · Máquina",
-        "3 series · 10–12 reps",
-        "50 kg - 12 / 55 kg - 12 / 50 kg - 12 · RIR 3",
-        "50 kg - 12 / 55 kg - 10–12 / 50 kg - 12",
+        "Hasta 3 series · 10–12 reps; esta semana máximo 2",
+        "40 kg - 12 / 50 kg - 12; tercera omitida. Molestia después del ejercicio.",
+        "Aproximación ligera; máximo 2 series a 40 kg - 10–12 si no hay molestias. Omitir si la rodilla no está totalmente recuperada.",
         "weight",
-        3,
+        2,
         "wed_press",
-        "No aumentar a 60 kg. Controlar recorrido y alineación."
+        "S3 omitida por programación: el objetivo limita a un máximo de 2 series."
       ],
       [
         "BLOQUE 2 — CUÁDRICEPS Y GEMELOS",
         "Extensión de cuádriceps · Máquina",
         "2 series · 12–15 reps",
-        "Sin registro reciente. Máximo histórico: 50 kg. Buena tolerancia histórica.",
-        "30 kg - 12–15 / 30–35 kg - 12–15",
+        "20 kg - 12 / 20 kg - 12 · RIR 3",
+        "Repetir 20 kg - 12/12, únicamente si no provoca molestias durante ni después. No subir a 30–35 kg.",
         "weight",
         2,
         "wed_quad",
-        "Primera serie a 30 kg. Probar 35 kg únicamente si hay buena técnica, RIR 3–4 y rodilla sin molestias. Movimiento lento y controlado. No bloquear bruscamente la rodilla."
+        ""
       ],
       [
         "BLOQUE 2 — CUÁDRICEPS Y GEMELOS",
         "Gemelos · Máquina",
         "3 series · 10–16 reps",
-        "5 kg - 16 / 10 kg - 12 / 5 kg - 16 · RIR 3",
-        "5 kg - 16 / 10 kg - 12–15 / 10 kg - 10–12",
+        "10 kg - 12 / 10 kg - 16 · RIR 3",
+        "5 kg - 16 / 10 kg - 12 / 10 kg - 12–15, si indoloro",
         "weight",
         3,
         "wed_calf",
-        "Dos series a 10 kg si se mantiene el recorrido completo."
+        ""
       ],
       [
-        "SUPER SERIE 3",
+        "BLOQUE 3 — GLÚTEOS",
         "Hip thrust · Máquina",
-        "3 series · 12 reps",
-        "5 kg - 12 / 7,5 kg - 12 / 7,5 kg - 12 · RIR 2",
-        "5 kg - 12 / 7,5 kg - 12 / 7,5 kg - 12",
+        "Hasta 3 series · 12 reps",
+        "Última realizada: 5 kg - 12 / 7,5 kg - 12 / 7,5 kg - 12. 28/10: omitido por rodilla.",
+        "Comenzar con 5 kg - 12; completar hasta 3 series solo si indoloro, sin superar 7,5 kg",
         "weight",
         3,
         "wed_hip",
         ""
       ],
       [
-        "SUPER SERIE 3",
+        "BLOQUE 3 — GLÚTEOS",
         "Abductores · Máquina",
-        "3 series · 12–15 reps",
-        "30 kg - 12 / 35 kg - 15 / 35 kg - 15 · RIR 3",
-        "30 kg - 12–15 / 35 kg - 12–15 / 35 kg - 12–15",
+        "2–3 series · 12–15 reps",
+        "30 kg - 12 / 30 kg - 12; tercera omitida",
+        "30 kg - 12/12; tercera opcional si rodilla sin molestias",
         "weight",
         3,
         "wed_abd",
@@ -244,8 +235,8 @@ const DAYS=[
         "LUMBAR + CORE",
         "Extensión lumbar · Banco",
         "2 series · 10–12 reps",
-        "Peso corporal - 10 / Peso corporal - 13 · RIR 2",
-        "Peso corporal - 10–12 en ambas series",
+        "Peso corporal - 10/10 · RIR 2",
+        "Repetir 10–12 por serie",
         "body",
         2,
         "wed_back",
@@ -254,9 +245,9 @@ const DAYS=[
       [
         "LUMBAR + CORE",
         "Plancha lateral",
-        "2 registros · tiempo por lado",
-        "30 / 35 s · RIR 2",
         "30–35 s por lado",
+        "Última realizada: izquierda 30 s / derecha 35 s. 28/10: omitida.",
+        "30 s por lado si la posición no molesta a la rodilla",
         "time",
         2,
         "wed_side",
@@ -267,25 +258,24 @@ const DAYS=[
   {
     "id": "thu",
     "tab": "Jue · Cardio",
-    "title": "JUEVES 29 — CARDIO B · BAJO IMPACTO",
+    "title": "JUEVES 5 — CARDIO B · BAJO IMPACTO",
     "session": "CARDIO B · BAJO IMPACTO",
-    "type": "dualcardio",
-    "mobility": "5 min cadera, tobillos y espalda."
+    "type": "lowimpact"
   },
   {
     "id": "fri",
     "tab": "Vie · C",
-    "title": "VIERNES 30 — FUERZA C · GIMNASIO",
+    "title": "VIERNES 6 — FUERZA C · GIMNASIO",
     "session": "FUERZA C · GIMNASIO",
     "type": "strength",
-    "warm": "<ol class=\"steps\"><li>5–7 min cardio suave.</li><li>Movilidad de hombros y escápulas.</li><li>Aproximaciones ligeras de tirón.</li></ol>",
+    "warm": "<ol class=\"steps\"><li>5–7 min actividad ligera si rodilla sin molestias.</li><li>Si no, movilidad de hombros y escápulas.</li><li>Aproximaciones de máquinas.</li></ol>",
     "ex": [
       [
         "BLOQUE 1 — ESPALDA Y PECHO",
         "Tirón vertical · Máquina",
         "2 series · 10–12 reps",
-        "Fuerza C gimnasio: 40 kg - 12 / 40 kg - 12 / 30 kg - 12 · RIR 3",
-        "40 kg - 12 / 40 kg - 12",
+        "40 kg - 10 / 40 kg - 12 · RIR 3",
+        "40 kg - 10–12 en ambas",
         "weight",
         2,
         "fri_pull",
@@ -295,8 +285,8 @@ const DAYS=[
         "BLOQUE 1 — ESPALDA Y PECHO",
         "Remo horizontal · Máquina",
         "2 series · 10–12 reps",
-        "Buena tolerancia conocida. Sin carga reciente registrada.",
-        "Carga cómoda para 10–12 reps. RIR 3–4.",
+        "20 kg - 12 / 30 kg - 12 · RIR 3",
+        "Repetir 20 kg - 12 / 30 kg - 12",
         "weight",
         2,
         "fri_row",
@@ -306,8 +296,8 @@ const DAYS=[
         "BLOQUE 1 — ESPALDA Y PECHO",
         "Press pecho · Máquina",
         "2 series · 10–12 reps",
-        "Fuerza C gimnasio: 20 kg - 12 en las tres series · RIR 2",
-        "20 kg - 12 / 20 kg - 12",
+        "20 kg - 12/12 · RIR 2",
+        "Repetir 20 kg - 12/12",
         "weight",
         2,
         "fri_chest",
@@ -317,30 +307,30 @@ const DAYS=[
         "BLOQUE 1 — ESPALDA Y PECHO",
         "Flexiones estándar · Suelo",
         "3 series · 5–8 reps",
-        "En casa: 5 / 7 / 6 reps · RIR 3 · Hombro 0/10",
-        "3 series de 5–8 reps. RIR 3, sin llegar al fallo.",
+        "5/5/5 · RIR 2 · hombro 0/10",
+        "5–6 reps por serie, RIR 2–3",
         "body",
         3,
         "fri_pushup",
-        "Manos en suelo, pies apoyados. Técnica estable y controlada."
+        ""
       ],
       [
-        "BLOQUE 2 — PIERNAS",
+        "BLOQUE 2 — PIERNAS (CONDICIONAL)",
         "Prensa de piernas · Máquina",
         "2 series · 10–12 reps",
-        "Fuerza C gimnasio: 50 kg - 12 en las tres series",
-        "50 kg - 12 / 50 kg - 12",
+        "Anterior C: omitida por rodilla",
+        "40 kg - 10–12 en hasta 2 series, solo si la rodilla está totalmente recuperada y Fuerza B no provocó molestias posteriores.",
         "weight",
         2,
         "fri_press",
-        "Una serie menos por carrera y extensiones del miércoles. Omitir si hay molestias de rodilla."
+        ""
       ],
       [
-        "BLOQUE 2 — PIERNAS",
+        "BLOQUE 2 — PIERNAS (CONDICIONAL)",
         "Curl femoral · Máquina",
         "2 series · 10–12 reps",
-        "Fuerza C gimnasio: 30 kg - 12 en las tres series",
-        "30 kg - 12 / 30 kg - 12",
+        "Anterior C: omitido por rodilla",
+        "25–30 kg - 10–12, solo si indoloro y sin reacción tras Fuerza B.",
         "weight",
         2,
         "fri_curl",
@@ -350,19 +340,19 @@ const DAYS=[
         "SUPER SERIE 3 — BRAZOS",
         "Curl bíceps · Mancuernas",
         "3 series · 10–12 reps",
-        "En casa: 8 kg - 12 en las tres series · RIR 3",
-        "8 kg - 10–12 en las tres series",
+        "8 kg - 12/12/11 · RIR 2",
+        "8 kg - 12/12/11–12",
         "weight",
         3,
         "fri_bic",
-        "No repetir la prueba de 10 kg del lunes durante esta semana."
+        ""
       ],
       [
         "SUPER SERIE 3 — BRAZOS",
         "Tríceps · Polea",
         "2 series · 10–12 reps",
-        "Fuerza C gimnasio: 12,5 kg - 12 / 12,5 kg - 12 / 10 kg - 12 · RIR 0",
-        "12,5 kg - 10–12 / 10 kg - 10–12 · RIR 2–3",
+        "12,5 kg - 10 / 10 kg - 12 · RIR 3",
+        "Repetir ambas series: 12,5 kg - 10 / 10 kg - 12",
         "weight",
         2,
         "fri_tri",
@@ -372,8 +362,8 @@ const DAYS=[
         "SUPER SERIE 4 — HOMBROS Y GEMELOS",
         "Elevaciones laterales · Mancuernas",
         "2 series · 12–13 reps",
-        "En casa: 6 kg - 12 / 6 kg - 13 · RIR 3",
-        "6 kg - 12–13 / 6 kg - 12–13",
+        "6 kg - 12/12 · RIR 2",
+        "Repetir 6 kg - 12/12",
         "weight",
         2,
         "fri_lat",
@@ -383,25 +373,15 @@ const DAYS=[
         "SUPER SERIE 4 — HOMBROS Y GEMELOS",
         "Gemelos · Máquina",
         "2 series · 12–16 reps",
-        "Fuerza C gimnasio: 5 kg - 15 en las tres series",
-        "5 kg - 15–16 / 5 kg - 15–16",
+        "10 kg - 12/16 · RIR 3",
+        "Repetir 10 kg - 12–16, solo si rodilla indolora",
         "weight",
         2,
         "fri_calf",
         ""
-      ],
-      [
-        "PARALELAS",
-        "Paralelas · Familiarización",
-        "1 bloque · 15–20 s",
-        "20 s de apoyo estático soportando todo el peso corporal. Sin dolor ni aprensión.",
-        "1 bloque de 15–20 s sin carga. No repetir apoyo libre cargado hasta tener valoración favorable.",
-        "parallel",
-        1,
-        "fri_parallel",
-        "Antecedentes de subluxaciones. Sin fondos dinámicos. Hasta valoración profesional de estabilidad, realizar solo agarre y control escapular con pies apoyados."
       ]
-    ]
+    ],
+    "parallelNote": "Anterior: 7 bajadas parciales sin molestias. Objetivo: no realizar bajadas ni fondos. Pendiente de valoración profesional por antecedentes de subluxaciones."
   }
 ];
 let storageProblem="";
@@ -432,7 +412,8 @@ function scale(k){return `<div class="scale" data-scale="${k}">${[0,1,2,3,4,5,6,
 
 
 function num(v){const x=String(v).trim().replace(',','.');return /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(x)?Number(x):NaN}
-function speed(id){const t=num(val(id==='tue'?'tue_time':'thu_tread_time')),d=num(val(id==='tue'?'tue_distance':'thu_tread_distance'));return Number.isFinite(t)&&t>0&&Number.isFinite(d)?fmtNum((d*60/t).toFixed(2)):'—'}
+function speed(id){const t=num(val(id+"_time")),d=num(val(id+"_distance"));return Number.isFinite(t)&&t>0&&Number.isFinite(d)?fmtNum((d*60/t).toFixed(2)):"—"}
+
 function invalidateSummary(){delete state._summary;delete state._summaryDay;const out=$('#output'),st=$('#status');if(out){out.textContent='';out.style.display='none'}if(st){st.className='status';st.textContent=''}}
 function comment(k){return `<textarea aria-label="${esc(k.replaceAll('_',' '))}" data-k="${k}">${esc(val(k))}</textarea>`}
 function metric(k,label,unit){return `<div class="label">${label}</div>${input(k,'number',unit)}`}
@@ -441,37 +422,37 @@ function dayStart(d){return `<div class="day" id="day_${d.id}" data-day="${d.id}
 
 function exerciseOmit(id){return `<label class="skip"><input type="checkbox" data-omit="${id}" data-k="${id}_omit" ${val(id+"_omit")===true?'checked':''}> Omitir ejercicio</label>`}
 function exerciseSkipped(id){return val(id+"_omit")===true||((id==="fri_press"||id==="fri_curl")&&val("fri_legs_skip")===true)}
-function exerciseScales(id){return id==="wed_press"?[[id+"_knee","Rodilla durante"]]:id==="wed_quad"?[[id+"_knee","Rodilla durante"],[id+"_knee_after","Rodilla después"]]:id==="fri_pushup"?[[id+"_shoulder_during","Hombro durante"]]:[]}
+const OPTIONAL_SETS={wed_press:[2],wed_curl:[2],wed_hip:[2,3],wed_abd:[3],fri_press:[2],fri_curl:[2],fri_calf:[2]};
+function optionalSet(id,i){return (OPTIONAL_SETS[id]||[]).includes(i)}
+function emptySet(id,type,i){return (type==="time"?["_t"]:type==="body"?["_r"]:["_w","_r"]).every(k=>String(val(id+k+i)).trim()==="")}
+function exerciseScales(id){return id==="wed_press"||id==="wed_quad"?[[id+"_knee","Rodilla durante"],[id+"_knee_after","Rodilla después"]]:id==="fri_pushup"?[[id+"_shoulder_during","Hombro durante"]]:[]}
+
 function renderExercise(e){
  const [sec,n,r,p,t,type,sets,id,note]=e;let rows="";
  if(type==="parallel")return `<div class="card exercise" data-ex="${id}" data-type="parallel" data-sets="1"><h3>${n}<span class="complete"></span></h3>${exerciseOmit(id)}<div class="meta">🎯 ${r}</div><div class="meta muted"><b>Anterior:</b> ${p}</div><div class="target">${t}</div><div class="note">${note}</div>${val(id+"_t1")!==""?`<div class="meta muted">Registro guardado de la versión anterior (apoyo estático): ${esc(val(id+"_t1"))} s · asistencia: ${esc(val(id+"_assist"))||"—"} · molestias/aprensión: ${esc(val(id+"_apprehension"))||"—"}. No se convierte en familiarización con pies apoyados.</div>`:""}<div data-familiar="${id}"><div class="label">Tiempo</div>${input(id+"_fam_time","number","s")}<div class="label">Tipo de apoyo</div>${input(id+"_fam_type","text")}<div class="label">Asistencia</div>${input(id+"_fam_assist","text")}<div class="label">Molestias / aprensión /10</div>${scale(id+"_fam_apprehension")}</div><div class="label">Comentarios</div>${comment(id+"_c")}</div>`;
  for(let i=1;i<=sets;i++){
-  const label=id==="wed_side"?(i===1?"Izq.":"Der."):"S"+i;
+  const label=id==="wed_side"?(i===1?"Izq.":"Der."):"S"+i+(optionalSet(id,i)?"*":"");
   rows+=`<div class="row"><div class="sl">${label}</div>`+(type==="weight"?input(id+"_w"+i,"number","kg")+input(id+"_r"+i,"number","reps"):type==="body"?`<div class="muted">Peso corporal</div>`+input(id+"_r"+i,"number","reps"):`<div style="grid-column:2/4">${input(id+"_t"+i,"number","s")}</div>`)+`</div>`;
  }
- return `<div class="card exercise" data-ex="${id}" data-type="${type}" data-sets="${sets}"><h3>${n}<span class="complete"></span></h3>${exerciseOmit(id)}<div class="meta">🎯 <b>Rango:</b> ${r}</div><div class="meta muted"><b>Anterior:</b> ${p}</div><div class="target">➡️ Objetivo sesión: ${t}</div>${note?`<div class="note">${note}</div>`:""}<div class="head"><div>${id==="wed_side"?"Lado":"Serie"}</div><div>${type==="time"?"Tiempo":"Peso"}</div><div>${type==="time"?"":"Reps"}</div></div>${rows}${rir(id)}${exerciseScales(id).map(([key,label])=>`<div class="label">${label} /10</div>${scale(key)}`).join("")}<div class="label">Comentarios</div>${comment(id+"_c")}</div>`;
+ return `<div class="card exercise" data-ex="${id}" data-type="${type}" data-sets="${sets}"><h3>${n}<span class="complete"></span></h3>${exerciseOmit(id)}<div class="meta">🎯 <b>Rango:</b> ${r}</div><div class="meta muted"><b>Anterior:</b> ${p}</div><div class="target">➡️ Objetivo sesión: ${t}</div>${note?`<div class="note">${note}</div>`:""}<div class="head"><div>${id==="wed_side"?"Lado":"Serie"}</div><div>${type==="time"?"Tiempo":"Peso"}</div><div>${type==="time"?"":"Reps"}</div></div>${OPTIONAL_SETS[id]?`<div class="meta muted">* ${OPTIONAL_SETS[id].map(i=>"S"+i).join(", ")} condicional: dejar sus dos campos vacíos indica serie omitida. Si la empiezas, registra lo realizado.</div>`:""}${rows}${rir(id)}${exerciseScales(id).map(([key,label])=>`<div class="label">${label} /10</div>${scale(key)}`).join("")}<div class="label">Comentarios</div>${comment(id+"_c")}</div>`;
 }
 
 function closing(day){
- return `<div class="section">CIERRE DE SESIÓN</div><div class="card closing" data-close="${day}">
- <div class="label">⏱️ ${day==="tue"?"Tiempo real total (recorrido completo)":"Tiempo total"}</div>${input(day+"_time","number","min")}
- <div class="label">Hombro /10</div>${scale(day+"_shoulder")}
- <div class="label">Rodilla /10</div>${scale(day+"_knee")}
- <div class="label">Zona lumbar /10</div>${scale(day+"_lumbar")}
- <div class="label">Otras molestias</div><textarea data-k="${day}_other" placeholder="Opcional. Zona, intensidad y momento">${esc(val(day+"_other"))}</textarea>
- <div class="two"><div><div class="label">⚡ Energía antes /10</div>${input(day+"_eb","number","")}</div><div><div class="label">⚡ Energía después /10</div>${input(day+"_ea","number","")}</div></div>
- <div class="label">Sensaciones generales <span class="muted">(obligatorio)</span></div><textarea data-k="${day}_general">${esc(val(day+"_general"))}</textarea></div>`;
+ const strength=DAYS.find(d=>d.id===day)?.type==="strength";
+ return `<div class="section">CIERRE DE SESIÓN</div><div class="card closing" data-close="${day}">${metric(day+"_time",day==="tue"?"Tiempo real total (recorrido completo)":"Tiempo total","min")}${strength?`<div class="label">Hombro /10</div>${scale(day+"_shoulder")}<div class="label">Rodilla derecha /10</div>${scale(day+"_knee_right")}<div class="label">Rodilla izquierda /10</div>${scale(day+"_knee_left")}<div class="label">Lumbar /10</div>${scale(day+"_lumbar")}<div class="label">Otras molestias</div>${comment(day+"_other")}`:""}<div class="two"><div>${metric(day+"_eb","Energía antes /10","")}</div><div>${metric(day+"_ea","Energía después /10","")}</div></div><div class="label">Sensaciones generales (obligatorio)</div>${comment(day+"_general")}</div>`;
 }
+
 function strengthDay(d){
- let out=dayStart(d)+`<div class="section">CALENTAMIENTO</div><div class="card">${d.warm}${d.id==="wed"?`<div class="label">Rodilla antes /10</div>${scale("wed_pre_knee")}<div class="label">Lumbar antes /10</div>${scale("wed_pre_lumbar")}`:""}<div class="label">Sensaciones tras calentamiento</div>${comment(d.id+"_warm")}</div>`;
- let sec="";d.ex.forEach(e=>{if(e[0]!==sec){sec=e[0];out+=`<div class="section">${sec}</div>`;if(d.id==="fri"&&sec==="BLOQUE 2 — PIERNAS")out+=`<div class="card">${skipControl("fri_legs","Omitir bloque de piernas por fatiga o molestias de rodilla")}</div>`}out+=renderExercise(e)});
- return out+closing(d.id)+`</div>`;
+ let out=dayStart(d)+(d.condition?`<div class="card note">${d.condition}</div>`:"")+`<div class="section">CALENTAMIENTO</div><div class="card">${d.warm}${d.id==="wed"?`<div class="label">Rodilla derecha antes /10</div>${scale("wed_pre_knee_right")}`:""}<div class="label">Sensaciones tras calentamiento</div>${comment(d.id+"_warm")}</div>`;
+ let sec="";d.ex.forEach(e=>{if(e[0]!==sec){sec=e[0];out+=`<div class="section">${sec}</div>`;if(d.id==="fri"&&sec==="BLOQUE 2 — PIERNAS (CONDICIONAL)")out+=`<div class="card">${skipControl("fri_legs","Omitir bloque de piernas por fatiga o molestias de rodilla")}</div>`}out+=renderExercise(e)});
+ return out+(d.parallelNote?`<div class="section">PARALELAS</div><div class="card note">${d.parallelNote}</div>`:"")+closing(d.id)+`</div>`;
 }
 
-function cardioDay(d){return dayStart(d)+`<div class="card"><h3>Semana 1 de vuelta a la carrera</h3><div class="target">Readaptación progresiva al impacto. No buscar velocidad ni distancia. Terreno llano y regular. Esfuerzo 3–4/10. Trote que permita conversar.</div></div><div class="section">CALENTAMIENTO</div><div class="card">7 min caminando a paso ligero. Movilidad de tobillos y caderas.${metric("tue_wu_time","Tiempo","min")}<div class="label">Rodilla antes /10</div>${scale("tue_pre_knee")}<div class="label">Sensaciones</div>${comment("tue_wu_comments")}</div><div class="section">BLOQUE PRINCIPAL · 24 MIN</div><div class="card"><h3>6 × (2 min trote + 2 min caminata)</h3><div class="target">12 min de trote + 12 min de caminata. Mantener ritmo conversacional. No acelerar en los últimos bloques. Si aparece dolor que aumenta, cojera o inestabilidad, detener el trote.</div>${metric("tue_blocks","Bloques completados","/6")}<div class="label">Esfuerzo percibido /10</div>${scale("tue_effort")}<div class="label">Rodilla durante /10</div>${scale("tue_run_knee")}<div class="label">Comentarios</div>${comment("tue_run_comments")}</div><div class="section">VUELTA A LA CALMA</div><div class="card">5 min caminando suavemente.${metric("tue_cool_time","Tiempo","min")}</div><div class="section">RESUMEN CARDIO A</div><div class="card"><div class="target">Tiempo objetivo total: 36 min.</div>${metric("tue_distance","Distancia total (calentamiento + intervalos + vuelta a la calma)","km")}<div class="meta muted">Usa la distancia y el tiempo del mismo recorrido completo. La media incluye trote y caminata.</div><div class="label">Velocidad media total calculada</div><output data-speed="tue">—</output></div>${closing("tue")}<div class="card"><div class="label">Rodilla al día siguiente /10</div>${scale("tue_next_knee")}<div class="meta muted">Completar mañana y volver a generar el resumen. No bloquea la exportación de hoy.</div></div></div>`;}
+function cardioDay(d){return dayStart(d)+`<div class="card"><h3>Reintroducir el trote</h3><div class="target">Solo si rodilla sin molestias al caminar y subir escaleras.</div><div class="meta">Intensidad 3–4/10. Ritmo conversacional. No buscar 6:30 min/km. Sin cuestas, sprints ni cambios de ritmo.</div></div><div class="section">CALENTAMIENTO</div><div class="card">7 min caminando cómodo. Terreno llano y regular. Zapatillas que no hayan provocado molestias.</div><div class="section">BLOQUE PRINCIPAL</div><div class="card"><h3>6 × (2 min trote + 2 min caminata)</h3><div class="meta">24 min: 12 min trotando + 12 min caminando.</div><div class="note">Si reaparece molestia de rodilla, dejar de trotar. No sustituirlo por caminata rápida exigente.</div>${metric("tue_blocks","Bloques completados","/6")}${metric("tue_distance","Distancia total del recorrido","km")}${metric("tue_trot_time","Tiempo trotando","min")}<div class="meta muted">Distancia y tiempo total deben corresponder al mismo recorrido completo.</div><div class="label">Velocidad media total calculada</div><output data-speed="tue">—</output><div class="label">Esfuerzo /10</div>${scale("tue_effort")}${cardioKnees("tue")}<div class="label">Comentarios (opcional)</div>${comment("tue_run_comments")}</div><div class="section">VUELTA A LA CALMA</div><div class="card">5 min caminando. Total previsto de la sesión: 36 min.</div>${closing("tue")}<div class="card"><div class="label">Rodilla a las 24 h /10 (opcional, completar después)</div>${scale("tue_next_knee")}<div class="meta muted">Puedes generar hoy y añadir el seguimiento mañana conservando la fecha de la sesión.</div></div></div>`;}
 
-function dualCardioDay(d){return dayStart(d)+`<div class="card"><div class="target">Mantener resistencia aeróbica sin añadir otro día de carrera.</div>${skipControl("thu_rest","Sesión omitida / descanso según evolución de rodilla")}</div><div data-thu-session><div class="section">CALENTAMIENTO</div><div class="card">5 min caminando suave.${metric("thu_wu_time","Tiempo","min")}</div><div class="section">BLOQUE 1 — BICI ESTÁTICA</div><div class="card"><div class="target">Hasta 10 min. Resistencia baja y constante. Sin programa de cuestas. Esfuerzo 3–4/10. Anterior: molestia de rodilla 3/10 en programa de resistencia variable. Interrumpir si reaparece dolor.</div>${skipControl("thu_bike","Bici omitida")}${metric("thu_bike_time","Tiempo","min")}${metric("thu_bike_distance","Distancia","km")}<div class="label">Resistencia</div>${input("thu_bike_level","text")}<div class="label">Esfuerzo /10</div>${scale("thu_bike_effort")}<div class="label">Rodilla durante /10</div>${scale("thu_bike_knee")}<div class="label">Comentarios</div>${comment("thu_bike_comments")}</div><div class="section">BLOQUE 2 — CINTA INCLINADA</div><div class="card"><div class="target">25–30 min · 5,5–6 km/h orientativos · inclinación 3–5 % · esfuerzo 4–5/10.</div><div class="meta">Anterior: 30 min / 2,7 km / inclinación 6 %. Velocidad media calculada: 5,4 km/h. Sin molestias. Objetivo: mantener esfuerzo cómodo. No aumentar pendiente esta semana.</div>${metric("thu_tread_time","Tiempo","min")}${metric("thu_tread_distance","Distancia","km")}${metric("thu_tread_inc","Inclinación media","%")}<div class="label">Velocidad media real calculada</div><output data-speed="thu">—</output><div class="label">Esfuerzo /10</div>${scale("thu_tread_effort")}<div class="label">Comentarios</div>${comment("thu_tread_comments")}</div><div class="section">VUELTA A LA CALMA</div><div class="card">5 min caminando suave.${metric("thu_cool_time","Tiempo","min")}</div><div class="section">MOVILIDAD</div><div class="card">${d.mobility}</div></div>${closing("thu")}</div>`;}
+function lowImpactDay(d){return dayStart(d)+`<div class="card"><h3>Resistencia suave sin impacto</h3><div class="target">Solo si la rodilla responde bien tras Fuerza B.</div>${skipControl("thu_rest","Sesión omitida / descanso por evolución de rodilla")}</div><div data-thu-session><div class="section">CALENTAMIENTO</div><div class="card">5 min caminando suave.</div><div class="section">OPCIONES DE CARDIO</div><div class="card"><div class="target">Principal: bici estática, 10–20 min. Resistencia baja y constante, cadencia cómoda, esfuerzo 3–4/10. No usar resistencia aleatoria. Detener si aparece molestia; si molesta, no insistir.</div><div class="meta">Alternativa: caminata cómoda, 20–30 min en llano, sin inclinación ni velocidad exigente. Solo si completamente indolora.</div><div class="note">No es necesario completar ambas opciones.</div><div class="label">Modalidad</div><select data-k="thu_mode"><option value="">Selecciona…</option><option value="bike">Bici estática</option><option value="walk">Caminata en llano</option></select>${metric("thu_distance","Distancia","km")}<div class="label">Resistencia / inclinación</div>${input("thu_level","text")}<div class="label">Velocidad media calculada</div><output data-speed="thu">—</output><div class="label">Esfuerzo /10</div>${scale("thu_effort")}${cardioKnees("thu")}</div></div>${closing("thu")}</div>`;}
 
+function cardioKnees(k){return `<div class="label">Rodilla antes /10</div>${scale(k+"_pre_knee")}<div class="label">Rodilla durante /10</div>${scale(k+"_during_knee")}<div class="label">Rodilla después /10</div>${scale(k+"_post_knee")}`}
 function sleepDay(){
  const nights=[["sunmon","Domingo → lunes"],["montue","Lunes → martes"],["tuewed","Martes → miércoles"],["wedthu","Miércoles → jueves"],["thufri","Jueves → viernes"],["frisat","Viernes → sábado"],["satsun","Sábado → domingo"]];
  return `<div class="day" id="day_sleep" data-day="sleep"><div class="dayhead"><h2>SUEÑO — SEGUIMIENTO SEMANAL</h2><div class="progress" id="sleepProgress"></div></div>
@@ -481,7 +462,7 @@ function sleepDay(){
 }
 function render(){
  $("#tabs").innerHTML=DAYS.map(d=>`<button data-tab="${d.id}">${d.tab}</button>`).join("")+`<button data-tab="sleep">Sueño</button>`;
- $("#days").innerHTML=DAYS.map(d=>d.type==="strength"?strengthDay(d):d.type==="dualcardio"?dualCardioDay(d):cardioDay(d)).join("")+sleepDay();
+ $("#days").innerHTML=DAYS.map(d=>d.type==="strength"?strengthDay(d):d.type==="lowimpact"?lowImpactDay(d):cardioDay(d)).join("")+sleepDay();
  bind();
  $$("select[data-k]").forEach(el=>{el.value=val(el.dataset.k);});
  switchDay(state._active||"mon"); refresh();if(storageProblem)toast(storageProblem);
@@ -512,21 +493,19 @@ function exMissing(card){
   }return m;
  }
  for(let i=1;i<=sets;i++){
+  if(optionalSet(id,i)&&emptySet(id,type,i))continue;
   if(type==="weight"&&val(id+"_w"+i)==="")m.push(`S${i} peso`);
   if(["weight","body"].includes(type)&&val(id+"_r"+i)==="")m.push(`S${i} reps`);
   if(type==="time"&&val(id+"_t"+i)==="")m.push(`S${i} tiempo`);
  }
  // Cero explícito permite registrar un ejercicio no realizado sin inventar RIR.
- const zero=Array.from({length:sets},(_,i)=>val(id+(type==="time"?"_t":"_r")+(i+1))).every(x=>x!==""&&num(x)===0);
+ const recorded=Array.from({length:sets},(_,i)=>val(id+(type==="time"?"_t":"_r")+(i+1))).filter(x=>x!=="");const zero=recorded.length>0&&recorded.every(x=>num(x)===0);
  if(val(id+"_rir")===""&&!zero)m.push("RIR");
  exerciseScales(id).forEach(([key,label])=>{if(val(key)==="")m.push(label.toLowerCase())});return m;
 }
 
-function closeMissing(day){
- const m=[]; if(val(day+"_time")==="")m.push("tiempo total");
- ["shoulder","knee","lumbar"].forEach(x=>{if(val(day+"_"+x)==="")m.push(x==="shoulder"?"hombro":x==="knee"?"rodilla":"zona lumbar")});
- if(val(day+"_eb")==="")m.push("energía antes");if(val(day+"_ea")==="")m.push("energía después");if(val(day+"_general")==="")m.push("sensaciones generales");return m;
-}
+function closeMissing(day){const keys=["time","eb","ea","general"],strength=DAYS.find(d=>d.id===day)?.type==="strength";if(strength)keys.push("shoulder","knee_right","knee_left","lumbar");const labels={time:"tiempo total",eb:"energía antes",ea:"energía después",general:"sensaciones",shoulder:"hombro",knee_right:"rodilla derecha",knee_left:"rodilla izquierda",lumbar:"lumbar"};return keys.filter(k=>String(val(day+"_"+k)).trim()==="").map(k=>labels[k]);}
+
 function refresh(){
  const active=state._active||"mon",day=$("#day_"+active);if(!day)return;
  $("#summaryTitle").textContent=active==="sleep"?"RESUMEN DE SUEÑO":"RESUMEN PARA EL DIARIO";$("#gen").textContent=active==="sleep"?"Generar sueño":"Generar día";
@@ -541,29 +520,21 @@ function refresh(){
 
 function validateDay(id){
  const d=DAYS.find(x=>x.id===id),misses=[];if(!d)return misses;
- const req=keys=>keys.forEach(([k,n])=>{if(val(k)===""||String(val(k)).trim()==="")misses.push(n)});
+ const req=keys=>keys.forEach(([k,label])=>{if(String(val(k)).trim()==="")misses.push(label)});
  if(d.type==="strength"){
-  req([[id+"_warm","Sensaciones tras calentamiento"]]);
-  if(id==="wed")req([["wed_pre_knee","Rodilla antes"],["wed_pre_lumbar","Lumbar antes"]]);
+  req([[id+"_warm","Sensaciones tras calentamiento"]]);if(id==="wed")req([["wed_pre_knee_right","Rodilla derecha antes"]]);
   if(id==="fri"&&val("fri_legs_skip")===true)req([["fri_legs_reason","Motivo de omisión del bloque de piernas"]]);
   $$(".exercise",$("#day_"+id)).forEach(c=>{const m=exMissing(c);if(m.length)misses.push($("h3",c).childNodes[0].textContent+": "+m.join(", "))});
- }else if(d.type==="runwalk")req([["tue_wu_time","Calentamiento: tiempo"],["tue_pre_knee","Rodilla antes"],["tue_wu_comments","Calentamiento: sensaciones"],["tue_blocks","Bloques completados"],["tue_effort","Esfuerzo"],["tue_run_knee","Rodilla durante"],["tue_distance","Distancia total"],["tue_cool_time","Vuelta a la calma: tiempo"]]);
- else if(val("thu_rest_skip")===true)req([["thu_rest_reason","Motivo del descanso"]]);
+ }else if(id==="thu"&&val("thu_rest_skip")===true)req([["thu_rest_reason","Motivo del descanso"]]);
  else{
-  req([["thu_wu_time","Calentamiento: tiempo"],["thu_tread_time","Cinta: tiempo"],["thu_tread_distance","Cinta: distancia"],["thu_tread_inc","Cinta: inclinación"],["thu_tread_effort","Cinta: esfuerzo"],["thu_cool_time","Vuelta a la calma: tiempo"]]);
-  if(val("thu_bike_skip")===true)req([["thu_bike_reason","Motivo de omisión de bici"]]);
-  else req([["thu_bike_time","Bici: tiempo"],["thu_bike_distance","Bici: distancia"],["thu_bike_level","Bici: resistencia"],["thu_bike_effort","Bici: esfuerzo"],["thu_bike_knee","Bici: rodilla durante"]]);
+  req([[id+"_distance","Distancia total"],[id+"_effort","Esfuerzo"],[id+"_pre_knee","Rodilla antes"],[id+"_during_knee","Rodilla durante"],[id+"_post_knee","Rodilla después"]]);
+  if(id==="tue")req([["tue_blocks","Bloques completados"],["tue_trot_time","Tiempo trotando"]]);
+  else{if(!["bike","walk"].includes(val("thu_mode")))misses.push("Modalidad: bici o caminata");req([["thu_level","Resistencia / inclinación"]]);}
  }
  closeMissing(id).forEach(x=>misses.push("Cierre: "+x));
- $$("[data-num]",$("#day_"+id)).forEach(el=>{
-  if(el.disabled||el.closest('[data-thu-session]')?.hidden)return;
-  const k=el.dataset.k;if(k.startsWith("thu_bike_")&&val("thu_bike_skip")===true)return;
-  if(el.closest("[data-familiar]")?.hidden)return;
-  const v=val(k);if(v!==""&&(!Number.isFinite(num(v))||num(v)<0||((k.endsWith("_eb")||k.endsWith("_ea"))&&num(v)>10)||(k==="tue_blocks"&&(!Number.isInteger(num(v))||num(v)>6))||(/_r[123]$/.test(k)&&!Number.isInteger(num(v)))))misses.push("Valor inválido: "+k.replaceAll('_',' '));
- });
- const cardioPairs=id==="tue"?[["tue_time","tue_distance","Cardio A"]]:id==="thu"&&val("thu_rest_skip")!==true?
-  [["thu_tread_time","thu_tread_distance","Cinta"],...(val("thu_bike_skip")===true?[]:[["thu_bike_time","thu_bike_distance","Bici"]])]:[];
- cardioPairs.forEach(([time,distance,label])=>{if(num(val(distance))>0&&num(val(time))===0)misses.push(label+": hay distancia registrada, pero el tiempo es 0 min. Revisa el tiempo antes de generar el resumen.")});
+ $$("[data-num]",$("#day_"+id)).forEach(el=>{if(el.disabled||el.closest('[data-thu-session]')?.hidden)return;const k=el.dataset.k,v=val(k);if(v!==""&&(!Number.isFinite(num(v))||num(v)<0||((k.endsWith("_eb")||k.endsWith("_ea"))&&num(v)>10)||(k==="tue_blocks"&&(!Number.isInteger(num(v))||num(v)>6))||(/_r[123]$/.test(k)&&!Number.isInteger(num(v)))))misses.push("Valor inválido: "+k.replaceAll('_',' '));});
+ if(d.type!=="strength"&&!(id==="thu"&&val("thu_rest_skip")===true)&&num(val(id+"_distance"))>0&&num(val(id+"_time"))===0)misses.push("Hay distancia registrada, pero el tiempo es 0 min. Revisa el tiempo antes de generar el resumen.");
+ if(id==="tue"&&num(val("tue_trot_time"))>num(val("tue_time")))misses.push("El tiempo trotando no puede superar el tiempo total.");
  return misses;
 }
 
@@ -578,32 +549,26 @@ function executionDate(id){
 function summaryHeader(d){return `${WEEK}\n${d.session||d.title}\nRealizada: ${executionDate(d.id)}\n`;}
 function summaryStrength(d){
  let s=summaryHeader(d)+"\nCALENTAMIENTO\nSensaciones tras calentamiento: "+val(d.id+"_warm")+"\n";
- if(d.id==="wed")s+=`Rodilla antes: ${val("wed_pre_knee")}/10\nLumbar antes: ${val("wed_pre_lumbar")}/10\n`;
+ if(d.id==="wed")s+=`Rodilla derecha antes: ${val("wed_pre_knee_right")}/10\n`;
  let sec="";d.ex.forEach(e=>{const [group,n,r,p,t,type,sets,id]=e;if(group!==sec){sec=group;s+="\n"+group+"\n"}
   if(exerciseSkipped(id)){s+=`- ${n}: Omitido${(id==="fri_press"||id==="fri_curl")&&val("fri_legs_skip")===true&&val("fri_legs_reason")?" · "+val("fri_legs_reason"):""}\n`;if(val(id+"_c"))s+=`  Comentarios: ${val(id+"_c")}\n`;return}
   if(type==="parallel"){s+=`- ${n}: Familiarización con pies apoyados, sin carga completa · ${val(id+"_fam_time")} s\n  Tipo de apoyo: ${val(id+"_fam_type")}\n  Asistencia: ${val(id+"_fam_assist")}\n  Molestias/aprensión: ${val(id+"_fam_apprehension")}/10\n`}
   else{
-   const arr=[];for(let i=1;i<=sets;i++)arr.push(type==="weight"?`${fmtNum(val(id+"_w"+i))} kg - ${val(id+"_r"+i)} reps`:type==="body"?`Peso corporal - ${val(id+"_r"+i)} reps`:`${id==="wed_side"?(i===1?"Izquierda: ":"Derecha: "):""}${val(id+"_t"+i)} s`);
+   const arr=[];for(let i=1;i<=sets;i++){if(optionalSet(id,i)&&emptySet(id,type,i)){arr.push(`S${i}: Omitida (condicional)`);continue}arr.push(type==="weight"?`${fmtNum(val(id+"_w"+i))} kg - ${val(id+"_r"+i)} reps`:type==="body"?`Peso corporal - ${val(id+"_r"+i)} reps`:`${id==="wed_side"?(i===1?"Izquierda: ":"Derecha: "):""}${val(id+"_t"+i)} s`);}
    s+=`- ${n}: ${arr.join(" / ")}\n  RIR: ${val(id+"_rir")!==""?val(id+"_rir"):"No realizado"}\n`;
+   if(id==="wed_press")s+="  S3: Omitida por programación (máximo 2 series).\n";
    exerciseScales(id).forEach(([key,label])=>s+=`  ${label}: ${val(key)}/10\n`);
   }
   if(val(id+"_c"))s+="  Comentarios: "+val(id+"_c")+"\n";
- });return s+closingSummary(d.id);
+ });if(d.parallelNote)s+="\nPARALELAS\n"+d.parallelNote+"\n";return s+closingSummary(d.id);
 }
 
 function modeName(m){return {walk_out:"Andar · calle",walk_tread:"Andar · cinta",run_out:"Correr · exterior",run_tread:"Correr · cinta",bike:"Bici estática"}[m]||"—"}
-function summaryCardio(d){return summaryHeader(d)+`\nCALENTAMIENTO\nTiempo: ${val("tue_wu_time")} min\nRodilla antes: ${val("tue_pre_knee")}/10\nSensaciones: ${val("tue_wu_comments")}\n\nBLOQUE PRINCIPAL\nPrescrito: 6 × (2 min trote + 2 min caminata), 24 min; 12 min trote + 12 min caminata.\nBloques completados: ${val("tue_blocks")}/6\nEsfuerzo: ${val("tue_effort")}/10\nRodilla durante: ${val("tue_run_knee")}/10\nComentarios: ${val("tue_run_comments")||"—"}\n\nVUELTA A LA CALMA\nTiempo: ${val("tue_cool_time")} min\n\nRESUMEN CARDIO A\nTiempo objetivo total: 36 min\nDistancia total: ${fmtNum(val("tue_distance"))} km\nVelocidad media total (trote + caminata, calculada): ${speed("tue")} km/h\n`+closingSummary("tue")+`\n\nRodilla al día siguiente: ${val("tue_next_knee")===""?"Pendiente de registrar":val("tue_next_knee")+"/10"}`;}
+function summaryCardio(d){return summaryHeader(d)+`\nCALENTAMIENTO\n7 min caminando cómodo, llano y regular, con zapatillas que no hayan provocado molestias.\n\nBLOQUE PRINCIPAL\nPrescrito: 6 × (2 min trote suave + 2 min caminata), 24 min; 12 min trotando y 12 min caminando.\nBloques completados: ${val("tue_blocks")}/6\nTiempo trotando: ${val("tue_trot_time")} min\nDistancia total: ${fmtNum(val("tue_distance"))} km\nVelocidad media total calculada: ${speed("tue")} km/h\nEsfuerzo: ${val("tue_effort")}/10\n`+cardioKneeSummary("tue")+`Comentarios: ${val("tue_run_comments")||"—"}\n\nVUELTA A LA CALMA\n5 min caminando. Total previsto: 36 min.\n`+closingSummary("tue")+`\n\nRodilla a las 24 h: ${val("tue_next_knee")===""?"Pendiente de registrar":val("tue_next_knee")+"/10"}`;}
 
-function summaryDualCardio(d){
- let s=summaryHeader(d);
- if(val("thu_rest_skip")===true)return s+`\nSesión omitida / descanso: ${val("thu_rest_reason")}\n`+closingSummary("thu");
- s+=`\nCALENTAMIENTO\nTiempo: ${val("thu_wu_time")} min\n\nBLOQUE 1 — BICI ESTÁTICA\n`;
- if(val("thu_bike_skip")===true)s+=`Omitida: ${val("thu_bike_reason")}\n`;
- else s+=`Tiempo: ${val("thu_bike_time")} min\nDistancia: ${fmtNum(val("thu_bike_distance"))} km\nResistencia: ${val("thu_bike_level")}\nEsfuerzo: ${val("thu_bike_effort")}/10\nRodilla durante: ${val("thu_bike_knee")}/10\nComentarios: ${val("thu_bike_comments")||"—"}\n`;
- s+=`\nBLOQUE 2 — CINTA INCLINADA\nTiempo: ${val("thu_tread_time")} min\nDistancia: ${fmtNum(val("thu_tread_distance"))} km\nInclinación media: ${fmtNum(val("thu_tread_inc"))} %\nVelocidad media real calculada: ${speed("thu")} km/h\nEsfuerzo: ${val("thu_tread_effort")}/10\nComentarios: ${val("thu_tread_comments")||"—"}\n\nVUELTA A LA CALMA\nTiempo: ${val("thu_cool_time")} min\n\nMOVILIDAD\n${d.mobility}\n`;
- return s+closingSummary("thu");
-}
+function summaryLowImpact(d){if(val("thu_rest_skip")===true)return summaryHeader(d)+`\nSesión omitida / descanso: ${val("thu_rest_reason")}\n`+closingSummary("thu");return summaryHeader(d)+`\nCALENTAMIENTO\n5 min caminando suave.\n\nCARDIO\nModalidad: ${val("thu_mode")==="bike"?"Bici estática":"Caminata en llano"}\nDistancia: ${fmtNum(val("thu_distance"))} km\nResistencia / inclinación: ${val("thu_level")}\nVelocidad media calculada: ${speed("thu")} km/h\nEsfuerzo: ${val("thu_effort")}/10\n`+cardioKneeSummary("thu")+closingSummary("thu");}
 
+function cardioKneeSummary(k){return `Rodilla antes: ${val(k+"_pre_knee")}/10\nRodilla durante: ${val(k+"_during_knee")}/10\nRodilla después: ${val(k+"_post_knee")}/10\n`}
 function summarySleep(){
  const nights=[["sunmon","Domingo → lunes"],["montue","Lunes → martes"],["tuewed","Martes → miércoles"],["wedthu","Miércoles → jueves"],["thufri","Jueves → viernes"],["frisat","Viernes → sábado"],["satsun","Sábado → domingo"]];
  const filled=nights.filter(([k])=>val("sleep_"+k)!=="");
@@ -615,7 +580,7 @@ function summarySleep(){
  s+=`\nObjetivo habitual: 7–7,5 h`; if(val("sleep_notes"))s+=`\nSensaciones de recuperación: ${val("sleep_notes")}`;
  return s;
 }
-function closingSummary(k){return `\nCIERRE DE SESIÓN\n\nTiempo total: ${val(k+"_time")} min\n\nMolestias\nHombro: ${val(k+"_shoulder")}/10\nRodilla: ${val(k+"_knee")}/10\nZona lumbar: ${val(k+"_lumbar")}/10\nOtras molestias: ${val(k+"_other")||"—"}\n\nEnergía antes: ${val(k+"_eb")}/10\nEnergía después: ${val(k+"_ea")}/10\n\nSensaciones generales: ${val(k+"_general")}`}
+function closingSummary(k){const strength=DAYS.find(d=>d.id===k)?.type==="strength";return `\nCIERRE DE SESIÓN\nTiempo total: ${val(k+"_time")} min\n`+(strength?`\nMolestias\nHombro: ${val(k+"_shoulder")}/10\nRodilla derecha: ${val(k+"_knee_right")}/10\nRodilla izquierda: ${val(k+"_knee_left")}/10\nLumbar: ${val(k+"_lumbar")}/10\nOtras molestias: ${val(k+"_other")||"—"}\n`:"")+`\nEnergía antes: ${val(k+"_eb")}/10\nEnergía después: ${val(k+"_ea")}/10\nSensaciones: ${val(k+"_general")}`;}
 
 $("#gen").onclick=()=>{
  const id=state._active||"mon",st=$("#status");
@@ -625,10 +590,10 @@ $("#gen").onclick=()=>{
   state._summary=txt;state._summaryDay=id;save();st.className="status ok show";st.textContent="✓ Resumen de sueño listo para copiar. Puedes generarlo aunque la semana aún no esté completa.";$("#output").textContent=txt;$("#output").style.display="block";toast("Resumen de sueño generado");return;
  }
  const miss=validateDay(id); if(miss.length){st.className="status warn show";st.innerHTML="⚠️ <b>Faltan datos obligatorios:</b><br>"+miss.map(x=>"• "+esc(x)).join("<br>");$("#output").style.display="none";return}
- const d=DAYS.find(x=>x.id===id),txt=d.type==="strength"?summaryStrength(d):d.type==="dualcardio"?summaryDualCardio(d):summaryCardio(d);state._summary=txt;state._summaryDay=id;save();st.className="status ok show";st.textContent="✓ Día completo. Resumen listo para copiar.";$("#output").textContent=txt;$("#output").style.display="block";toast("Resumen generado");
+ const d=DAYS.find(x=>x.id===id),txt=d.type==="strength"?summaryStrength(d):d.type==="lowimpact"?summaryLowImpact(d):summaryCardio(d);state._summary=txt;state._summaryDay=id;save();st.className="status ok show";st.textContent="✓ Día completo. Resumen listo para copiar.";$("#output").textContent=txt;$("#output").style.display="block";toast("Resumen generado");
 };
 $("#copy").onclick=async()=>{if(!state._summary || state._summaryDay!==(state._active||"mon")){toast("Primero genera esta pestaña");return}try{await navigator.clipboard.writeText(state._summary);toast("Copiado al portapapeles")}catch(e){toast("Mantén pulsado sobre el resumen para copiar")}};
-$("#reset").onclick=()=>{if(confirm("Esto borrará SOLO los datos de la semana 26–30 de octubre. No crea una semana nueva. ¿Seguro?")){localStorage.removeItem(STORE);location.reload()}};
+$("#reset").onclick=()=>{if(confirm("Esto borrará SOLO los datos de la semana 2–6 de noviembre. No crea una semana nueva. ¿Seguro?")){localStorage.removeItem(STORE);location.reload()}};
 render();
 </script>
 </body></html>

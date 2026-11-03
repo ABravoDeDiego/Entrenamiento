@@ -1,165 +1,49 @@
 const {chromium,webkit}=require('playwright');
-const fs=require('fs');
-const path=require('path');
-const os=require('os');
-const http=require('http');
+const fs=require('fs'),path=require('path'),os=require('os'),http=require('http'),assert=require('assert/strict');
 process.chdir(path.resolve(__dirname,'..'));
-let baseURL;
-const html=fs.readFileSync('index.html','utf8');
-const server=http.createServer((req,res)=>{res.setHeader('Content-Type','text/html; charset=utf-8');res.end(html)});
-const outputDir=process.env.QA_OUTPUT_DIR||fs.mkdtempSync(path.join(os.tmpdir(),'entrenamiento-qa-'));
-fs.mkdirSync(outputDir,{recursive:true});
-function launchOptions(name){return name==='Chromium'&&process.env.QA_CHROMIUM_EXECUTABLE?{headless:true,executablePath:process.env.QA_CHROMIUM_EXECUTABLE,args:['--no-sandbox','--disable-dev-shm-usage']}:{headless:true}}
-const assert=require('assert/strict');
-const results=[];
-async function test(engine,name){
- let browser;try{browser=await engine.launch(launchOptions(name))}catch(e){results.push({engine:name,test:'Browser launch',status:'NO EJECUTADO',detail:e.message.split('\n')[0]});return}
- const context=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true,timezoneId:'Europe/Madrid'});
- const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
- const check=async(title,fn)=>{try{await fn();results.push({engine:name,test:title,status:'PASS'})}catch(e){results.push({engine:name,test:title,status:'FAIL',detail:e.message});throw e}};
- const go=async id=>{await page.locator(`[data-tab="${id}"]`).click()};
- const fill=async id=>{await page.evaluate(id=>{
+const html=fs.readFileSync('index.html','utf8'),results=[];
+const out=process.env.QA_OUTPUT_DIR||fs.mkdtempSync(path.join(os.tmpdir(),'entrenamiento-qa-'));fs.mkdirSync(out,{recursive:true});
+const server=http.createServer((q,r)=>{r.setHeader('Content-Type','text/html; charset=utf-8');r.end(html)});
+function launchOptions(n){return n==='Chromium'&&process.env.QA_CHROMIUM_EXECUTABLE?{headless:true,executablePath:process.env.QA_CHROMIUM_EXECUTABLE,args:['--no-sandbox','--disable-dev-shm-usage']}:{headless:true}}
+async function run(engine,name,url){
+ let b;try{b=await engine.launch(launchOptions(name))}catch(e){results.push({engine:name,test:'Arranque del navegador',status:'NO EJECUTADO',detail:e.message.split('\n')[0]});return}
+ const c=await b.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,timezoneId:'Europe/Madrid'}),p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ const check=async(test,fn)=>{try{await fn();results.push({engine:name,test,status:'PASS'})}catch(e){results.push({engine:name,test,status:'FAIL',detail:e.message});throw e}};
+ const go=async id=>p.locator(`[data-tab="${id}"]`).click();
+ const gen=async()=>{await p.locator('#gen').click();assert.equal(await p.locator('#output').isVisible(),true,await p.locator('#status').innerText());return p.locator('#output').innerText()};
+ const field=key=>p.locator(`[data-k="${key}"]`);
+ const score=async(key,value)=>p.locator(`[data-scale="${key}"] [data-v="${value}"]`).click();
+ const fill=async id=>p.evaluate(id=>{
   const root=document.querySelector('#day_'+id);
-  root.querySelectorAll('[data-k]').forEach(el=>{if(el.disabled||el.type==='checkbox'||el.tagName==='SELECT')return;const k=el.dataset.k;
-   let v=el.dataset.num?'12':'Sesión cómoda';
-   if(k.endsWith('_eb')||k.endsWith('_ea'))v='8';
-   if(k==='tue_blocks')v='6';if(k==='tue_time')v='36';if(k==='tue_distance')v='3,6';
-   if(k==='thu_tread_time')v='30';if(k==='thu_tread_distance')v='3';if(k==='thu_bike_time')v='10';
-   if(k.startsWith('sleep_'))v='7,5';
-   el.value=v;el.dispatchEvent(new Event('input',{bubbles:true}));
-  });
-  root.querySelectorAll('[data-rir]').forEach(x=>x.querySelector('[data-v="3"]').click());
-  root.querySelectorAll('[data-scale]').forEach(x=>x.querySelector('[data-v="0"]').click());
- },id)};
+  root.querySelectorAll('[data-k]').forEach(el=>{if(el.type==='checkbox'||el.disabled)return;const k=el.dataset.k;if(el.tagName==='SELECT'){el.value='bike'}else{let v=el.hasAttribute('data-num')?'12':'Prueba local';if(k.endsWith('_eb')||k.endsWith('_ea'))v='8';if(k.endsWith('_time'))v='36';if(k.endsWith('_distance'))v='3,6';if(k==='tue_blocks')v='6';if(k==='tue_trot_time')v='12';if(k==='thu_time')v='20';el.value=v}el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}))});
+  root.querySelectorAll('[data-rir]').forEach(el=>el.querySelector('[data-v="3"]').click());root.querySelectorAll('[data-scale]').forEach(el=>el.querySelector('[data-v="0"]').click());
+ },id);
  try{
-  await page.goto(baseURL);
-  await check('Arranque, seis pestañas, semana y campos vacíos',async()=>{assert.equal(await page.locator('#tabs button').count(),6);assert.match(await page.locator('.week').innerText(),/26 — 30/);assert.equal(await page.locator('[data-k="mon_chest_w1"]').inputValue(),'');assert.deepEqual(errors,[])});
-  await check('Fidelidad de series y paralelas de esta semana',async()=>{
-   const data=await page.evaluate(()=>DAYS.map(d=>[d.id,d.ex?.map(e=>[e[7],e[6]])]));
-   assert.deepEqual(data[0][1].map(x=>x[1]),[3,3,3,2,1,3,3,2,2]);assert.deepEqual(data[2][1].map(x=>x[1]),[3,2,3,2,3,3,3,2,2]);assert.deepEqual(data[4][1].map(x=>x[1]),[2,2,2,3,2,2,3,2,2,2,1]);assert.equal(await page.locator('[data-k="mon_parallel_omit"]').count(),1);assert.equal(await page.locator('[data-k="fri_parallel_tri_w"]').count(),0);
-  });
-  await check('Vacíos bloquean exportación con detalle',async()=>{await page.locator('#gen').click();assert.match(await page.locator('#status').innerText(),/S1 peso/);assert.equal(await page.locator('#output').isVisible(),false)});
-  await check('Fuerza A: decimales, RIR, cero, copia y recarga',async()=>{
-   await fill('mon');await page.locator('[data-k="mon_tri_w1"]').fill('12,5');await page.locator('[data-rir="mon_chest"] [data-v="0"]').click();
-   await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/12,5 kg/);assert.match(await page.locator('#output').innerText(),/RIR: 0/);assert.match(await page.locator('#output').innerText(),/Realizada:/);
-   if(name==='Chromium'){await context.grantPermissions(['clipboard-read','clipboard-write']);await page.locator('#copy').click();assert.match(await page.evaluate(()=>navigator.clipboard.readText()),/FUERZA A/)}
-   await page.reload();assert.equal(await page.locator('[data-k="mon_tri_w1"]').inputValue(),'12,5');assert.equal(await page.locator('[data-rir="mon_chest"] [data-v="0"]').getAttribute('class'),'sel');
-  });
-  await check('Resumen se invalida al editar o cambiar pestaña',async()=>{await page.locator('#gen').click();await page.locator('[data-k="mon_tri_w1"]').fill('10');await page.locator('#copy').click();assert.equal(await page.locator('#output').isVisible(),false);assert.match(await page.locator('#toast').innerText(),/Primero genera/);await go('tue');assert.equal(await page.locator('#output').isVisible(),false)});
-  await check('Carrera: parcial, media total y rodilla pendiente',async()=>{await fill('tue');await page.locator('[data-k="tue_blocks"]').fill('4');await page.evaluate(()=>setv('tue_next_knee',''));await page.locator('#gen').click();const text=await page.locator('#output').innerText();assert.match(text,/Bloques completados: 4\/6/);assert.match(text,/6,00 km\/h/);assert.match(text,/Pendiente de registrar/);assert.equal(await page.locator('#day_tue .progress').innerText(),'Registro completo');await page.locator('[data-k="tue_blocks"]').fill('7');await page.locator('#gen').click();assert.match(await page.locator('#status').innerText(),/Valor inválido/);await page.locator('[data-k="tue_blocks"]').fill('4');await page.locator('[data-scale="tue_next_knee"] [data-v="2"]').click();await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/Rodilla al día siguiente: 2\/10/)});
-  await check('Fuerza B: rodilla previa, cuádriceps y lados',async()=>{await go('wed');await fill('wed');await page.locator('#gen').click();const t=await page.locator('#output').innerText();assert.match(t,/Rodilla antes: 0\/10/);assert.match(t,/Extensión de cuádriceps/);assert.match(t,/Rodilla durante: 0\/10/);assert.match(t,/Izquierda: 12 s \/ Derecha: 12 s/)});
-  await check('Cardio dual: campos exactos, media y omisión bici/descanso',async()=>{await go('thu');await fill('thu');await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/6,00 km\/h/);await page.locator('[data-k="thu_bike_skip"]').check();await page.locator('[data-k="thu_bike_reason"]').fill('Rodilla cargada');await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/Omitida: Rodilla cargada/);await page.locator('[data-k="thu_rest_skip"]').check();await page.locator('[data-k="thu_rest_reason"]').fill('Descanso por rodilla');await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/Sesión omitida \/ descanso/);assert.doesNotMatch(await page.locator('#output').innerText(),/BLOQUE 2/)});
-  await check('Fuerza C: omisión piernas y paralelas sin serie extra',async()=>{await go('fri');await fill('fri');await page.locator('[data-k="fri_parallel_omit"]').check();await page.locator('[data-k="fri_legs_skip"]').check();await page.locator('[data-k="fri_legs_reason"]').fill('Fatiga de rodilla');await page.locator('#gen').click();const t=await page.locator('#output').innerText();assert.match(t,/Prensa de piernas · Máquina: Omitido/);assert.match(t,/Paralelas · Familiarización: Omitido/);assert.doesNotMatch(t,/tercera serie/);await page.locator('[data-k="fri_parallel_omit"]').uncheck();await page.locator('[data-k="fri_parallel_fam_time"]').fill('20');await page.locator('[data-k="fri_parallel_fam_assist"]').fill('Apoyo de pies');await page.locator('[data-k="fri_parallel_fam_type"]').fill('Pies apoyados');await page.locator('[data-scale="fri_parallel_fam_apprehension"] [data-v="0"]').click();await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/Familiarización con pies apoyados, sin carga completa · 20 s/)});
-  await check('Sueño parcial y media con coma decimal',async()=>{await go('sleep');await page.locator('[data-k="sleep_sunmon"]').fill('7,5');await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/Media provisional \(1\/7 noches\): 7,50 h/);await page.locator('[data-k="sleep_sunmon"]').fill('30');await page.locator('#gen').click();assert.match(await page.locator('#status').innerText(),/entre 0 y 24/);await page.locator('[data-k="sleep_sunmon"]').fill('7,5')});
-  await check('Cancelar borrado conserva datos; confirmar solo borra esta semana',async()=>{
-   await page.evaluate(()=>localStorage.setItem('entreno_v6_semana_2026-10-19','{"old":"conservar"}'));
-   const before=await page.evaluate(()=>localStorage.getItem(STORE));
-   page.once('dialog',d=>d.dismiss());await page.locator('#reset').click();assert.equal(await page.evaluate(()=>localStorage.getItem(STORE)),before);
-   page.once('dialog',d=>d.accept());await page.locator('#reset').click();await page.waitForLoadState('load');
-   assert.equal(await page.evaluate(()=>localStorage.getItem('entreno_v7_semana_2026-10-26')),null);
-   assert.equal(await page.evaluate(()=>localStorage.getItem('entreno_v6_semana_2026-10-19')),'{"old":"conservar"}');
-  });
-  await check('Datos persisten en recarga con HTML servido por la prueba',async()=>{
-   await go('mon');await fill('mon');await page.locator('[data-k="mon_chest_w1"]').fill('20');
-   await context.route('**/*',route=>route.fulfill({body:fs.readFileSync('index.html','utf8'),contentType:'text/html'}));
-   await context.setOffline(true);await page.reload();assert.equal(await page.locator('[data-k="mon_chest_w1"]').inputValue(),'20');await context.setOffline(false);await context.unroute('**/*');
-  });
-  await check('Omitir y volver a activar piernas conserva resultados y RIR',async()=>{
-   await go('fri');await fill('fri');await page.locator('[data-k="fri_press_w1"]').fill('50');
-   await page.locator('[data-k="fri_legs_skip"]').check();assert.equal(await page.locator('[data-k="fri_press_w1"]').isEnabled(),false);
-   await page.locator('[data-k="fri_legs_skip"]').uncheck();assert.equal(await page.locator('[data-k="fri_press_w1"]').isEnabled(),true);assert.equal(await page.locator('[data-k="fri_press_w1"]').inputValue(),'50');assert.equal(await page.locator('[data-rir="fri_press"] [data-v="3"]').getAttribute('class'),'sel');
-  });
-  await check('Todas las repeticiones a cero exportan sin inventar RIR',async()=>{
-   await go('mon');await fill('mon');for(let i=1;i<=3;i++){await page.locator('[data-k="mon_chest_r'+i+'"]').fill('0');await page.locator('[data-k="mon_chest_w'+i+'"]').fill('0')}
-   await page.evaluate(()=>setv('mon_chest_rir',''));await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/Press pecho · Máquina: 0 kg - 0 reps \/ 0 kg - 0 reps \/ 0 kg - 0 reps\n  RIR: No realizado/);
-  });
-  await check('Paralelas: omitir no exporta un apoyo registrado previamente',async()=>{
-   await go('fri');await page.locator('[data-k="fri_parallel_omit"]').uncheck();await page.locator('[data-k="fri_parallel_fam_time"]').fill('20');await page.locator('[data-k="fri_parallel_fam_assist"]').fill('Apoyo de pies');await page.locator('[data-k="fri_parallel_fam_type"]').fill('Pies apoyados');await page.locator('[data-scale="fri_parallel_fam_apprehension"] [data-v="0"]').click();
-   await page.locator('[data-k="fri_parallel_omit"]').check();await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/Paralelas · Familiarización: Omitido/);assert.doesNotMatch(await page.locator('#output').innerText(),/sin carga completa · 20 s/);
-  });
-  await check('No existen identificadores duplicados de campos',async()=>{const keys=await page.locator('[data-k]').evaluateAll(els=>els.map(e=>e.dataset.k));assert.equal(keys.length,new Set(keys).size)});
-  await check('Fidelidad final: bíceps 10 kg solo lunes y campos nuevos de molestias',async()=>{
-   assert.match(await page.locator('[data-ex="mon_bic"] .target').innerText(),/8 kg - 12 \/ 10 kg - 6–8 \(PRUEBA\) \/ 8 kg - 10–12/);
-   assert.match(await page.locator('[data-ex="mon_bic"] .note').innerText(),/25 %/);
-   assert.match(await page.locator('[data-ex="fri_bic"] .target').innerText(),/8 kg - 10–12 en las tres series/);
-   assert.match(await page.locator('[data-ex="fri_bic"] .note').innerText(),/No repetir la prueba de 10 kg/);
-   for(const key of ['tue_pre_knee','wed_press_knee','wed_quad_knee','wed_quad_knee_after','fri_pushup_shoulder_during','mon_parallel_fam_apprehension','fri_parallel_fam_apprehension'])assert.equal(await page.locator('[data-scale="'+key+'"]').count(),1);
-  });
-  await check('Familiarización lunes: registrar pies, asistencia, dolor y persistencia',async()=>{
-   await go('mon');await fill('mon');await page.locator('[data-k="mon_parallel_omit"]').uncheck();await page.locator('[data-k="mon_parallel_fam_time"]').fill('15');await page.locator('[data-k="mon_parallel_fam_type"]').fill('Pies en suelo');await page.locator('[data-k="mon_parallel_fam_assist"]').fill('Descarga en piernas');await page.locator('[data-scale="mon_parallel_fam_apprehension"] [data-v="0"]').click();await page.locator('#gen').click();
-   let text=await page.locator('#output').innerText();assert.match(text,/Familiarización con pies apoyados, sin carga completa · 15 s/);assert.match(text,/Tipo de apoyo: Pies en suelo/);assert.match(text,/Molestias\/aprensión: 0\/10/);assert.doesNotMatch(text,/valoración profesional favorable/);await page.reload();await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/Descarga en piernas/);
-  });
-  await check('Nuevas molestias se validan y exportan sin inventar ceros',async()=>{
-   await go('wed');await fill('wed');await page.evaluate(()=>setv('wed_quad_knee_after',''));await page.locator('#gen').click();assert.match(await page.locator('#status').innerText(),/rodilla después/);await page.locator('[data-scale="wed_quad_knee_after"] [data-v="2"]').click();await page.locator('[data-scale="wed_press_knee"] [data-v="1"]').click();await page.locator('#gen').click();let text=await page.locator('#output').innerText();assert.match(text,/Rodilla después: 2\/10/);assert.match(text,/Rodilla durante: 1\/10/);
-   await go('fri');await fill('fri');await page.locator('[data-scale="fri_pushup_shoulder_during"] [data-v="2"]').click();await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/Hombro durante: 2\/10/);
-  });
-  await check('Checkbox por ejercicio: peso, repeticiones, tiempo, molestias y familiarización',async()=>{
-   assert.equal(await page.locator('[data-omit]').count(),await page.locator('.exercise').count());
-   await go('wed');await fill('wed');for(const id of ['wed_rdl','wed_back','wed_side','wed_quad']){
-    await page.locator('[data-k="'+id+'_c"]').fill('');
-    await page.evaluate(id=>{document.querySelector('[data-ex="'+id+'"]').querySelectorAll('input[data-num]').forEach(el=>{el.value='';el.dispatchEvent(new Event('input',{bubbles:true}))});},id);
-    await page.locator('[data-k="'+id+'_omit"]').check();
-   }
-   await page.locator('#gen').click();const text=await page.locator('#output').innerText();assert.match(text,/Peso muerto rumano · Mancuernas: Omitido/);assert.match(text,/Extensión lumbar · Banco: Omitido/);assert.match(text,/Plancha lateral: Omitido/);assert.match(text,/Extensión de cuádriceps · Máquina: Omitido/);
-  });
-  await check('Omisión conserva datos y permite comentarios opcionales, también tras recarga',async()=>{
-   await go('mon');await fill('mon');await page.locator('[data-k="mon_bic_w2"]').fill('10');await page.locator('[data-rir="mon_bic"] [data-v="2"]').click();await page.locator('[data-k="mon_bic_omit"]').check();assert.equal(await page.locator('[data-k="mon_bic_c"]').isEnabled(),true);await page.locator('[data-k="mon_bic_c"]').fill('No lo hago hoy');await page.locator('#gen').click();let text=await page.locator('#output').innerText();assert.match(text,/Curl bíceps · Mancuernas: Omitido\n  Comentarios: No lo hago hoy/);assert.doesNotMatch(text,/Curl bíceps · Mancuernas:.*10 kg/);
-   await page.reload();assert.equal(await page.locator('[data-k="mon_bic_omit"]').isChecked(),true);assert.equal(await page.locator('[data-k="mon_bic_w2"]').inputValue(),'10');await page.locator('[data-k="mon_bic_omit"]').uncheck();assert.equal(await page.locator('[data-k="mon_bic_w2"]').isEnabled(),true);assert.equal(await page.locator('[data-rir="mon_bic"] [data-v="2"]').getAttribute('class'),'sel');await page.locator('#gen').click();assert.match(await page.locator('#output').innerText(),/Curl bíceps · Mancuernas:.*10 kg/);
-  });
-  await check('Omitido ignora valores inválidos previos y al desmarcar vuelve a validarlos',async()=>{
-   await page.locator('[data-k="mon_bic_w2"]').fill('incorrecto');await page.locator('[data-k="mon_bic_omit"]').check();await page.locator('#gen').click();assert.equal(await page.locator('#output').isVisible(),true);await page.locator('[data-k="mon_bic_omit"]').uncheck();assert.equal(await page.locator('#output').isVisible(),false);await page.locator('#gen').click();assert.match(await page.locator('#status').innerText(),/Valor inválido: mon bic w2/);await page.locator('[data-k="mon_bic_w2"]').fill('10');
-  });
-  await check('No se omite por dejar vacío; el cierre sigue siendo obligatorio',async()=>{
-   await page.locator('[data-k="mon_chest_r1"]').fill('');await page.locator('#gen').click();assert.match(await page.locator('#status').innerText(),/S1 reps/);
-   for(const checkbox of await page.locator('#day_mon [data-omit]').all())await checkbox.check();
-   for(const comment of await page.locator('#day_mon .exercise textarea').all())await comment.fill('');await page.locator('#gen').click();assert.equal(await page.locator('#output').isVisible(),true);assert.equal((await page.locator('#output').innerText()).match(/: Omitido/g).length,9);
-   await page.locator('[data-k="mon_time"]').fill('');await page.locator('#gen').click();assert.match(await page.locator('#status').innerText(),/Cierre: tiempo total/);
-  });
-  await check('Omisión de paralelas anterior se conserva sin convertirse en realización',async()=>{
-   await page.evaluate(()=>localStorage.setItem('entreno_v7_semana_2026-10-26',JSON.stringify({_active:'mon',mon_parallel_decision:'omit',fri_parallel_decision:'omit'})));await page.reload();assert.equal(await page.locator('[data-k="mon_parallel_omit"]').isChecked(),true);await go('fri');assert.equal(await page.locator('[data-k="fri_parallel_omit"]').isChecked(),true);await page.locator('[data-k="fri_parallel_omit"]').uncheck();await page.locator('[data-k="fri_parallel_c"]').fill('Pendiente de realizar');await page.reload();await go('fri');assert.equal(await page.locator('[data-k="fri_parallel_omit"]').isChecked(),false);
-  });
-  await check('Una revisión de la misma semana conserva registros anteriores sin reclasificar apoyos',async()=>{
-   await page.evaluate(()=>{const k='entreno_v7_semana_2026-10-26';localStorage.setItem(k,JSON.stringify({_active:'fri',mon_bic_w2:'8',mon_bic_r2:'12',fri_parallel_decision:'support',fri_parallel_t1:'20',fri_parallel_assist:'Sin asistencia',fri_parallel_apprehension:'Ninguna',tue_executionDate:'martes, 27 de octubre de 2026',sleep_sunmon:'7,5'}))});await page.reload();assert.equal(await page.locator('[data-k="mon_bic_w2"]').inputValue(),'8');assert.equal(await page.locator('[data-k="fri_parallel_fam_time"]').inputValue(),'');assert.match(await page.locator('[data-ex="fri_parallel"]').innerText(),/Registro guardado de la versión anterior/);await page.locator('#gen').click();assert.match(await page.locator('#status').innerText(),/Paralelas · Familiarización: tiempo/);assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('entreno_v7_semana_2026-10-26')).fri_parallel_t1),'20');assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('entreno_v7_semana_2026-10-26')).tue_executionDate),'martes, 27 de octubre de 2026');
-  });
-  await check('Datos inválidos no impiden arranque; semana previa conservada' ,async()=>{await page.evaluate(()=>{localStorage.setItem('entreno_v6_semana_2026-10-19','{"old":"conservar"}');localStorage.setItem(STORE,'bad JSON')});await page.reload();assert.equal(await page.locator('#tabs button').count(),6);assert.equal(await page.evaluate(()=>localStorage.getItem('entreno_v6_semana_2026-10-19')),'{"old":"conservar"}');assert.equal(await page.evaluate(()=>localStorage.getItem(STORE)),'bad JSON');assert.deepEqual(errors,[])});
-  await check('Móvil: todas las pestañas sin desbordamiento horizontal',async()=>{for(const id of ['mon','tue','wed','thu','fri','sleep']){await go(id);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true)}await go('tue');await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:path.join(outputDir,`qa-${name.toLowerCase()}.png`),fullPage:true})});
-  await check('Sin errores de ejecución durante toda la prueba',async()=>assert.deepEqual(errors,[]));
- }finally{await browser.close()}
-}
-async function edgeCases(){
- let b;try{b=await chromium.launch(launchOptions('Chromium'))}catch(e){results.push({engine:'Chromium',test:'Casos de fecha y coherencia cardio',status:'NO EJECUTADO',detail:e.message.split('\n')[0]});return}
- try{
- const c=await b.newContext({timezoneId:'Europe/Madrid'}),p=await c.newPage();
- await p.clock.install({time:new Date('2026-10-27T18:00:00+01:00')});await p.goto(baseURL);
- await p.evaluate(()=>{switchDay('tue');document.querySelector('#day_tue').querySelectorAll('[data-k]').forEach(el=>{if(el.type==='checkbox')return;el.value=el.dataset.num?'1':'Prueba';el.dispatchEvent(new Event('input',{bubbles:true}))});document.querySelector('#day_tue').querySelectorAll('[data-scale]').forEach(el=>el.querySelector('[data-v="0"]').click());setv('tue_time','36');setv('tue_distance','3,6');setv('tue_blocks','6')});
- await p.locator('#gen').click();const before=(await p.locator('#output').innerText()).split('\n').find(x=>x.startsWith('Realizada:'));
- await p.clock.setFixedTime(new Date('2026-10-28T08:00:00+01:00'));await p.locator('[data-scale="tue_next_knee"] [data-v="2"]').click();await p.locator('#gen').click();const after=(await p.locator('#output').innerText()).split('\n').find(x=>x.startsWith('Realizada:'));
- results.push({engine:'Chromium',test:'Conservar fecha al añadir rodilla al día siguiente',status:before===after?'PASS':'FAIL',detail:before+' → '+after});
- await p.locator('[data-k="tue_time"]').fill('0');await p.locator('#gen').click();
- results.push({engine:'Chromium',test:'Bloquear distancia positiva con cero minutos',status:await p.locator('#output').isVisible()?'FAIL':'PASS'});
-
- const record=(test,ok,detail)=>results.push({engine:'Chromium',test,status:ok?'PASS':'FAIL',...(detail?{detail}:{})});
- record('Aviso de tiempo incoherente visible',/hay distancia registrada, pero el tiempo es 0 min/.test(await p.locator('#status').innerText()));
- await p.locator('[data-k="tue_time"]').fill('36');await p.locator('#gen').click();const savedSummary=await p.locator('#output').innerText();
- await p.reload();await p.locator('#gen').click();
- record('Fecha y seguimiento de rodilla persisten tras recarga',(await p.locator('#output').innerText()).includes(before)&&(await p.locator('#output').innerText()).includes('Rodilla al día siguiente: 2/10'));
- await p.evaluate(summary=>{const k='entreno_v7_semana_2026-10-26',data=JSON.parse(localStorage.getItem(k));delete data.tue_executionDate;data._summary=summary;data._summaryDay='tue';localStorage.setItem(k,JSON.stringify(data));},savedSummary);
- await p.reload();await p.locator('#gen').click();record('Recuperar fecha de un resumen anterior a la actualización',(await p.locator('#output').innerText()).includes(before));
- await p.locator('[data-tab="thu"]').click();
- await p.evaluate(()=>{const root=document.querySelector('#day_thu');root.querySelectorAll('[data-k]').forEach(el=>{if(el.type==='checkbox')return;el.value=el.dataset.num?'1':'Prueba';el.dispatchEvent(new Event('input',{bubbles:true}))});root.querySelectorAll('[data-scale]').forEach(el=>el.querySelector('[data-v="0"]').click())});
- await p.locator('[data-k="thu_tread_time"]').fill('0');await p.locator('[data-k="thu_tread_distance"]').fill('3');await p.locator('#gen').click();record('Cinta rechaza distancia positiva con cero minutos',!(await p.locator('#output').isVisible())&&(await p.locator('#status').innerText()).includes('Cinta: hay distancia'));
- await p.locator('[data-k="thu_tread_time"]').fill('30');await p.locator('[data-k="thu_bike_time"]').fill('0');await p.locator('[data-k="thu_bike_distance"]').fill('2');await p.locator('#gen').click();record('Bici rechaza distancia positiva con cero minutos',!(await p.locator('#output').isVisible())&&(await p.locator('#status').innerText()).includes('Bici: hay distancia'));
- await p.locator('[data-k="thu_bike_skip"]').check();await p.locator('[data-k="thu_bike_reason"]').fill('Omitida por rodilla');await p.locator('#gen').click();const thuSummary=await p.locator('#output').innerText();record('Bici omitida ignora datos antiguos y cada sesión conserva su fecha',(await p.locator('#output').isVisible())&&thuSummary.includes('miércoles, 28 de octubre de 2026')&&!thuSummary.includes(before)&&thuSummary.includes('Omitida: Omitida por rodilla'));
- await p.locator('[data-k="thu_tread_time"]').fill('0');await p.locator('[data-k="thu_tread_distance"]').fill('0');await p.locator('#gen').click();record('Cero tiempo y cero distancia siguen permitidos',await p.locator('#output').isVisible());
-
+  await p.goto(url);
+  await check('Arranque, seis pestañas y semana 2–6 noviembre',async()=>{assert.equal(await p.locator('#tabs button').count(),6);assert.match(await p.locator('.week').innerText(),/2 — 6 NOVIEMBRE/);assert.equal(await field('mon_bic_w2').inputValue(),'');assert.deepEqual(errors,[])});
+  await check('Fidelidad de series: 8/9/10 ejercicios y prensa máximo dos',async()=>{const data=await p.evaluate(()=>DAYS.filter(d=>d.ex).map(d=>d.ex.map(e=>e[6])));assert.deepEqual(data,[[3,3,3,2,3,3,2,2],[3,2,2,2,3,3,3,2,2],[2,2,2,3,2,2,3,2,2,2]]);assert.equal(await field('wed_press_w3').count(),0);assert.equal(await p.locator('[data-omit]').count(),27)});
+  await check('Cargas actualizadas y paralelas sin ejecución',async()=>{assert.match(await p.locator('[data-ex="mon_bic"] .target').innerText(),/10 kg - 10/);assert.match(await p.locator('[data-ex="wed_quad"] .target').innerText(),/20 kg - 12\/12/);assert.match(await p.locator('[data-ex="wed_quad"] .target').innerText(),/No subir a 30–35/);assert.match(await p.locator('[data-ex="fri_press"] .target').innerText(),/40 kg/);assert.equal(await p.locator('[data-ex*="parallel"]').count(),0)});
+  await check('Vacíos bloquean exportación con detalle',async()=>{await p.locator('#gen').click();assert.match(await p.locator('#status').innerText(),/S1 peso/);assert.equal(await p.locator('#output').isVisible(),false)});
+  await check('Fuerza A: coma decimal y rodillas separadas',async()=>{await fill('mon');await field('mon_tri_w1').fill('12,5');await score('mon_knee_right',2);const t=await gen();assert.match(t,/12,5 kg/);assert.match(t,/Rodilla derecha: 2\/10/);assert.match(t,/Rodilla izquierda: 0\/10/);assert.match(t,/PARALELAS\nNo realizar fondos ni descensos/)});
+  await check('Autoguardado y copia',async()=>{await p.reload();assert.equal(await field('mon_tri_w1').inputValue(),'12,5');await gen();if(name==='Chromium'){await c.grantPermissions(['clipboard-read','clipboard-write']);await p.locator('#copy').click();assert.match(await p.evaluate(()=>navigator.clipboard.readText()),/FUERZA A/)}else assert.equal(await p.locator('#copy').isEnabled(),true)});
+  await check('Edición y cambio de pestaña invalidan resumen',async()=>{await field('mon_tri_w1').fill('10');assert.equal(await p.locator('#output').isVisible(),false);await p.locator('#copy').click();assert.match(await p.locator('#toast').innerText(),/Primero genera/);await go('tue');assert.equal(await p.locator('#output').isVisible(),false)});
+  await check('Carrera: tiempo trotando y rodilla antes/durante/después',async()=>{await fill('tue');await field('tue_blocks').fill('4');await field('tue_trot_time').fill('8');await score('tue_post_knee',1);const t=await gen();assert.match(t,/Bloques completados: 4\/6/);assert.match(t,/Tiempo trotando: 8 min/);assert.match(t,/6,00 km\/h/);assert.match(t,/Rodilla después: 1\/10/);assert.doesNotMatch(t,/Hombro:|Lumbar:/);assert.equal(await field('tue_wu_time').count(),0)});
+  await check('Límites de bloques y coherencia entre distancia, tiempo y trote',async()=>{await field('tue_blocks').fill('7');await p.locator('#gen').click();assert.match(await p.locator('#status').innerText(),/Valor inválido/);await field('tue_blocks').fill('6');await field('tue_time').fill('0');await p.locator('#gen').click();assert.match(await p.locator('#status').innerText(),/distancia registrada, pero el tiempo es 0/);await field('tue_time').fill('5');await p.locator('#gen').click();assert.match(await p.locator('#status').innerText(),/trotando no puede superar/);await field('tue_time').fill('36')});
+  await check('Fuerza B: rodilla derecha previa y rodilla después de prensa',async()=>{await go('wed');await fill('wed');await score('wed_pre_knee_right',1);await score('wed_press_knee_after',2);const t=await gen();assert.match(t,/Rodilla derecha antes: 1\/10/);assert.match(t,/Rodilla después: 2\/10/);assert.match(t,/S3: Omitida por programación \(máximo 2 series\)/);assert.match(t,/Izquierda: 12 s \/ Derecha: 12 s/)});
+  await check('Series condicionales vacías se exportan omitidas, no como ceros',async()=>{for(const [id,sets] of [['wed_press',[2]],['wed_curl',[2]],['wed_hip',[2,3]],['wed_abd',[3]]])for(const i of sets){await field(id+'_w'+i).fill('');await field(id+'_r'+i).fill('')}const t=await gen();assert.equal((t.match(/Omitida \(condicional\)/g)||[]).length,5);assert.doesNotMatch(t,/kg -  reps/)});
+  await check('Serie condicional incompleta y serie obligatoria vacía bloquean',async()=>{await field('wed_hip_w2').fill('5');await p.locator('#gen').click();assert.match(await p.locator('#status').innerText(),/Hip thrust.*S2 reps/);await field('wed_hip_w2').fill('');await field('wed_abd_r1').fill('');await p.locator('#gen').click();assert.match(await p.locator('#status').innerText(),/Abductores.*S1 reps/);await field('wed_abd_r1').fill('12')});
+  await check('Omisión ignora valores inválidos y al desmarcar vuelve a validar',async()=>{await field('wed_quad_w1').fill('incorrecto');await field('wed_quad_omit').check();await field('wed_quad_c').fill('');assert.match(await gen(),/Extensión de cuádriceps · Máquina: Omitido/);assert.equal(await field('wed_quad_c').isEnabled(),true);await field('wed_quad_omit').uncheck();await p.locator('#gen').click();assert.match(await p.locator('#status').innerText(),/Valor inválido: wed quad w1/);await field('wed_quad_w1').fill('20')});
+  await check('Omisión, comentarios y datos persisten tras recarga',async()=>{await go('mon');await field('mon_bic_w2').fill('10');await field('mon_bic_omit').check();await field('mon_bic_c').fill('Descanso hoy');assert.match(await gen(),/Curl bíceps · Mancuernas: Omitido\n  Comentarios: Descanso hoy/);await p.reload();await go('mon');assert.equal(await field('mon_bic_omit').isChecked(),true);await field('mon_bic_omit').uncheck();assert.equal(await field('mon_bic_w2').inputValue(),'10');assert.equal(await field('mon_bic_w2').isEnabled(),true)});
+  await check('Jueves: bici o caminata sin exigir ambas opciones',async()=>{await go('thu');await fill('thu');assert.match(await gen(),/Modalidad: Bici estática/);assert.equal(await field('thu_tread_time').count(),0);await field('thu_mode').selectOption('walk');await field('thu_level').fill('Llano, sin inclinación');const t=await gen();assert.match(t,/Modalidad: Caminata en llano/);assert.match(t,/Rodilla antes: 0\/10/);assert.doesNotMatch(t,/BLOQUE 1|BLOQUE 2/);await p.reload();await go('thu');assert.equal(await field('thu_mode').inputValue(),'walk')});
+  await check('Jueves: tiempo/distancia coherentes y descanso',async()=>{await field('thu_time').fill('0');await p.locator('#gen').click();assert.match(await p.locator('#status').innerText(),/distancia registrada, pero el tiempo es 0/);await field('thu_rest_skip').check();await field('thu_rest_reason').fill('Respuesta de rodilla');const t=await gen();assert.match(t,/Sesión omitida \/ descanso/);assert.doesNotMatch(t,/Modalidad:/)});
+  await check('Fuerza C: omitir piernas, recuperar datos y hombro en flexiones',async()=>{await go('fri');await fill('fri');await score('fri_pushup_shoulder_during',1);await field('fri_legs_skip').check();await field('fri_legs_reason').fill('Rodilla no recuperada');const t=await gen();assert.match(t,/Prensa de piernas · Máquina: Omitido/);assert.match(t,/Curl femoral · Máquina: Omitido/);assert.match(t,/Hombro durante: 1\/10/);assert.match(t,/no realizar bajadas ni fondos/);await field('fri_legs_skip').uncheck();assert.equal(await field('fri_press_w1').inputValue(),'12')});
+  await check('Rodilla izquierda obligatoria en cierre de fuerza',async()=>{await p.evaluate(()=>setv('fri_knee_left',''));await p.locator('#gen').click();assert.match(await p.locator('#status').innerText(),/rodilla izquierda/);await score('fri_knee_left',0);await gen()});
+  await check('Sueño parcial con coma decimal y rango válido',async()=>{await go('sleep');await field('sleep_sunmon').fill('7,5');assert.match(await gen(),/Media provisional \(1\/7 noches\): 7,50 h/);await field('sleep_sunmon').fill('30');await p.locator('#gen').click();assert.match(await p.locator('#status').innerText(),/entre 0 y 24/)});
+  await check('Sin campos duplicados; seis pestañas sin desbordamiento móvil',async()=>{const keys=await p.locator('[data-k]').evaluateAll(els=>els.map(e=>e.dataset.k));assert.equal(keys.length,new Set(keys).size);for(const id of ['mon','tue','wed','thu','fri','sleep']){await go(id);assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true)}await go('thu');await p.screenshot({path:path.join(out,name+'-jueves.png'),fullPage:true})});
+  await check('Borrado con confirmación solo afecta noviembre y conserva octubre',async()=>{await p.evaluate(()=>localStorage.setItem('entreno_v7_semana_2026-10-26','{"old":"conservar"}'));const before=await p.evaluate(()=>localStorage.getItem('entreno_v8_semana_2026-11-02'));p.once('dialog',d=>d.dismiss());await p.locator('#reset').click();assert.equal(await p.evaluate(()=>localStorage.getItem('entreno_v8_semana_2026-11-02')),before);p.once('dialog',d=>d.accept());await p.locator('#reset').click();await p.waitForLoadState('load');assert.equal(await p.evaluate(()=>localStorage.getItem('entreno_v8_semana_2026-11-02')),null);assert.equal(await p.evaluate(()=>localStorage.getItem('entreno_v7_semana_2026-10-26')),'{"old":"conservar"}')});
+  await check('Almacenamiento dañado no bloquea arranque',async()=>{await p.evaluate(()=>localStorage.setItem('entreno_v8_semana_2026-11-02','JSON roto'));await p.reload();assert.equal(await p.locator('#tabs button').count(),6);assert.equal(await p.evaluate(()=>localStorage.getItem('entreno_v8_semana_2026-11-02')),'JSON roto')});
+  await check('Fecha conserva el día de sesión al añadir seguimiento a las 24 h',async()=>{await p.evaluate(()=>localStorage.removeItem('entreno_v8_semana_2026-11-02'));await p.reload();await p.clock.install({time:new Date('2026-11-03T18:00:00+01:00')});await go('tue');await fill('tue');const before=await gen();await p.clock.setFixedTime(new Date('2026-11-04T08:00:00+01:00'));await score('tue_next_knee',2);await p.reload();await go('tue');const t=await gen();assert.equal(t.match(/^Realizada:.*$/m)[0],before.match(/^Realizada:.*$/m)[0]);assert.match(t,/martes, 3 de noviembre de 2026/);assert.match(t,/Rodilla a las 24 h: 2\/10/)});
+  await check('Sin errores de ejecución durante todo el recorrido',async()=>assert.deepEqual(errors,[]));
  }finally{await b.close()}
 }
-(async()=>{
- try{
- await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve)});baseURL='http://127.0.0.1:'+server.address().port+'/';
- for(const [engine,name]of [[chromium,'Chromium'],[webkit,'WebKit']]){try{await test(engine,name)}catch(e){results.push({engine:name,test:'Finalización completa del recorrido',status:'FAIL',detail:e.message});}}
- await edgeCases();
- fs.writeFileSync(path.join(outputDir,'results.json'),JSON.stringify(results,null,2));console.log(JSON.stringify({outputDir,results},null,2));
- if(!results.some(r=>r.engine==='Chromium'&&r.status==='PASS')||results.some(r=>r.status==='FAIL'))process.exitCode=1;
- }catch(e){console.error(e);process.exitCode=1}finally{await new Promise(r=>server.close(r))}
-})();
+(async()=>{try{await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve)});const url='http://127.0.0.1:'+server.address().port+'/';for(const [engine,name] of [[chromium,'Chromium'],[webkit,'WebKit']]){try{await run(engine,name,url)}catch(e){results.push({engine:name,test:'Recorrido completo',status:'FAIL',detail:e.message})}}fs.writeFileSync(path.join(out,'results.json'),JSON.stringify(results,null,2));console.log(JSON.stringify({outputDir:out,results},null,2));if(!results.some(r=>r.engine==='Chromium'&&r.status==='PASS')||results.some(r=>r.status==='FAIL'))process.exitCode=1}catch(e){console.error(e);process.exitCode=1}finally{await new Promise(r=>server.close(r))}})();
