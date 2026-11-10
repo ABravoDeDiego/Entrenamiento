@@ -117,3 +117,17 @@ Solicitud aprobada: un checkbox «Omitir ejercicio» por tarjeta, con comentario
 - Paralelas A/C: solo control escapular asistido, con tiempo y molestias, sin RIR; tipo de apoyo en A. Checkbox de omisión con comentario opcional.
 - Jueves: bici 15–20 min o cinta llana 20–30 min, 5–5,5 km/h y 0 %. Sin añadir calentamiento no prescrito.
 - QA: 27 comprobaciones Chromium, incluida omisión reversible de ejercicios nuevos, tres series obligatorias, series condicionales C, fecha persistente y separación semanal. Ancho móvil 390 px. WebKit/Safari real no ejecutados.
+
+
+## V9.1 — Reorganización de la semana 9–15 noviembre de 2026
+
+- Tres sesiones: miércoles 11 A + cinta; jueves 12 B; viernes 13 C + bici. Se conserva la pestaña de sueño.
+- Sin carrera programada: no volver a incorporarla hasta que el usuario solicite retomarla. Próxima progresión de cinta: consolidar 5,5 km/h al 2 % antes de subir una sola variable.
+- Misma semana: conserva `entreno_v9_semana_2026-11-09` e identificadores de sesiones A/B/C. Los nombres internos mon/wed/fri identifican las sesiones históricas; los títulos y pestañas muestran miércoles/jueves/viernes. Las fechas de ejecución ya registradas no se alteran.
+- Los registros de carrera, cardio alternativo y piernas C retirados se conservan almacenados; no se muestran, validan ni exportan como parte de esta programación. No se convierten en los nuevos bloques de cinta o bici.
+- C elimina prensa, femoral y gemelos. Incluye aviso de omisión por programación. B mantiene las tres series de femoral, extensiones, hip thrust y abductores y dos de prensa a 35–40 kg.
+- Cinta A: 15–20 min; 0–5 a 5,0–5,5 km/h y 0 %; 5–15 a 5,5 y 2 %; últimos 5 opcionales a 5,5 y 0 %. Bici C: 15–20 min de resistencia baja y constante.
+- Cada bloque de cardio registra su propio tiempo y distancia; la media se calcula con esos valores. Cinta distingue velocidad programada y media real. El tiempo total del gimnasio permanece independiente. Distancia positiva con tiempo cero y bloque mayor que sesión impiden generar.
+- Checkbox de omisión en ejercicios y cardio, con comentario opcional, sin borrar los datos. Paralelas solo tiempo y molestias; sin RIR, tipo de apoyo ni asistencia obligatorios.
+- **PASS:** 25 comprobaciones Chromium: fidelidad, exportación conjunta, ausencia de carrera y piernas C, cálculo de velocidad, omisiones y restauración, tres series obligatorias, hombro, persistencia, datos anteriores, fechas, copia, sueño, borrado limitado y ancho móvil 390 px. Revisión visual de ambas tarjetas cardio.
+- **NO EJECUTADO:** WebKit / Safari real.
