@@ -106,3 +106,14 @@ Solicitud aprobada: un checkbox «Omitir ejercicio» por tarjeta, con comentario
 - Paralelas: solo aviso de no hacer bajadas ni fondos, pendiente de valoración profesional. No hay formulario de ejecución esta semana.
 - **PASS:** 24 comprobaciones en Chromium: arranque, fidelidad, campos vacíos, registros separados de rodillas, exportación/copia/recarga, carrera, series condicionales completas y omitidas, omisiones/restauración, alternativas del jueves, fecha a las 24 h, sueño, borrado limitado a noviembre, almacenamiento inválido y presentación móvil de 390 px. Revisión visual adicional de prensa B y cardio B.
 - **NO EJECUTADO:** WebKit y Safari real.
+
+
+## V9 — Semana 9–13 de noviembre de 2026
+
+- Clave nueva `entreno_v9_semana_2026-11-09`; conserva registros de semanas anteriores.
+- A: prueba de press 30 kg con aproximación 25 kg y control de hombro; tres series de tríceps.
+- B: femoral, extensiones, hip thrust y abductores tienen tres series programadas obligatorias; prensa dos a 35–40 kg. Plancha lateral S1/S2 en segundos por lado.
+- C: press inclinado con mancuernas 6 kg sustituye horizontal; registra hombro y estabilidad/aprensión.
+- Paralelas A/C: solo control escapular asistido, con tiempo y molestias, sin RIR; tipo de apoyo en A. Checkbox de omisión con comentario opcional.
+- Jueves: bici 15–20 min o cinta llana 20–30 min, 5–5,5 km/h y 0 %. Sin añadir calentamiento no prescrito.
+- QA: 27 comprobaciones Chromium, incluida omisión reversible de ejercicios nuevos, tres series obligatorias, series condicionales C, fecha persistente y separación semanal. Ancho móvil 390 px. WebKit/Safari real no ejecutados.
