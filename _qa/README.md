@@ -131,3 +131,18 @@ Solicitud aprobada: un checkbox «Omitir ejercicio» por tarjeta, con comentario
 - Checkbox de omisión en ejercicios y cardio, con comentario opcional, sin borrar los datos. Paralelas solo tiempo y molestias; sin RIR, tipo de apoyo ni asistencia obligatorios.
 - **PASS:** 25 comprobaciones Chromium: fidelidad, exportación conjunta, ausencia de carrera y piernas C, cálculo de velocidad, omisiones y restauración, tres series obligatorias, hombro, persistencia, datos anteriores, fechas, copia, sueño, borrado limitado y ancho móvil 390 px. Revisión visual de ambas tarjetas cardio.
 - **NO EJECUTADO:** WebKit / Safari real.
+
+
+## V10 — Semana 16–20 noviembre de 2026
+
+- Semana nueva: `entreno_v10_semana_2026-11-16`; no copiar resultados ni fechas de la semana anterior.
+- Cinco días separados: A lunes; cinta + Pallof martes; B miércoles; bici jueves; C viernes. Sin carrera.
+- Prescripción actualizada desde el texto final del usuario: nuevas cargas, prensa 40 kg sin subida, tres extensiones programadas, press inclinado 7,5 kg repetido.
+- Nuevos: empujes escapulares en pared (dos series sin RIR), Pallof por lado y reverse pec deck que sustituye laterales del viernes. Paralelas solo asistidas el viernes.
+- Plancha lateral: S1 derecha/izquierda y S2 derecha/izquierda independientes; se validan y exportan los cuatro tiempos sin duplicar un dato para ambos lados.
+- Registros de control/temblor y hombro según campos suministrados; escalas 0–10 únicamente donde lo especifica la rutina. Campos de comentarios opcionales.
+- Cinta: 20 min al 0 %, fases 5,5/6/5,5 km/h. Velocidad seleccionada separada de media real calculada por tiempo y distancia. Bici 15–20 min, sin registro previo inventado. Ambos cardio tienen cierre completo de molestias y energía.
+- Cierre semanal solicitado: cinco decisiones explícitas sobre sesión realizada/no realizada, rodilla 24 h después de B, respuesta de hombros, control/temblores y sensaciones. No inferir sesiones realizadas a partir de formularios parcialmente cumplimentados.
+- Se mantiene checkbox de omisión con comentario opcional, datos recuperables al desmarcar y ceros explícitos para series no realizadas.
+- **PASS:** 26 comprobaciones Chromium: fidelidad, campos nuevos, cero explícito, omisión/restauración, cálculo cardio, cuatro tiempos por lado, cierres diarios y semanal, persistencia, copia, fecha, sueño, separación semanal y borrado limitado. Revisión visual de Pallof y plancha a 390 px.
+- **NO EJECUTADO:** WebKit / Safari real.
