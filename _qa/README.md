@@ -146,3 +146,14 @@ Solicitud aprobada: un checkbox «Omitir ejercicio» por tarjeta, con comentario
 - Se mantiene checkbox de omisión con comentario opcional, datos recuperables al desmarcar y ceros explícitos para series no realizadas.
 - **PASS:** 26 comprobaciones Chromium: fidelidad, campos nuevos, cero explícito, omisión/restauración, cálculo cardio, cuatro tiempos por lado, cierres diarios y semanal, persistencia, copia, fecha, sueño, separación semanal y borrado limitado. Revisión visual de Pallof y plancha a 390 px.
 - **NO EJECUTADO:** WebKit / Safari real.
+
+
+## V10.1 — Revisión final y proceso compacto
+
+- Misma semana y clave V10. Se conservan identificadores, resultados y fechas. Cargas y series sin cambios.
+- Bloques/superseries y numeración recuperados en interfaz y resumen; reglas de rondas y cargas de prueba completas.
+- Nuevos registros: control del hombro en rotación, lumbar/técnica, rodilla izquierda previa, hombro en plancha lateral y estabilidad en remo. Extensiones solo exige rodilla durante según la última plantilla; el dato posterior anterior se conserva sin mostrarse.
+- Press inclinado: aprensión/estabilidad pasa a texto conservando su clave y valor previo. Paralelas separa hombro y aprensión; el registro conjunto previo se conserva como tal, sin inferir dos valores.
+- Cierre semanal añade tolerancia al Pallof press y reverse pec deck.
+- QA: 30 PASS en Chromium, WebKit/Safari real no ejecutados. Pruebas existentes reutilizadas y cuatro casos añadidos para los cambios. Salida compacta, detalle en results.json.
+- Proceso para futuras actualizaciones: [PROCESO.md](PROCESO.md). Separar programación y plantilla es una propuesta pendiente; no se aplica en esta versión.
