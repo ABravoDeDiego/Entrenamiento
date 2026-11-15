@@ -34,385 +34,584 @@ input[data-num]{font-size:17px;text-align:center}.skip{display:flex;align-items:
 <div class="toast" id="toast"></div>
 
 <script>
-const WEEK="SEMANA 16 — 20 NOVIEMBRE 2026";
-const STORE="entreno_v10_semana_2026-11-16";
-const RIRS=[0,1,2,3,"4+"];
-
-const DAYS=[
-  {
-    "id": "mon",
-    "tab": "Lun · A",
-    "title": "LUNES 16 — FUERZA A",
-    "session": "FUERZA A",
-    "type": "strength",
-    "warm": "<ol class=\"steps\"><li>5–7 min cinta suave + movilidad escapular.</li><li>Aproximaciones progresivas de press.</li></ol>",
-    "ex": [
-      [
-        "ACTIVACIÓN ESCAPULAR",
-        "Empujes escapulares en pared · Nuevo",
-        "2 × 10 suaves",
-        "Sin registro",
-        "2 × 10 suaves, movimiento controlado",
-        "control",
-        2,
-        "mon_scap",
-        "Priorizar control, sin buscar fatiga."
-      ],
-      [
-        "SUPERSERIE 1 — PECHO + ESPALDA",
-        "1A. Press pecho · Máquina",
-        "3 series",
-        "20 kg × 12 / 30 kg × 7 / 25 kg × 9 · RIR 3 · Hombro 0",
-        "20 kg × 12 / 30 kg × 7–9 / 25 kg × 10–12",
-        "weight",
-        3,
-        "mon_chest",
-        ""
-      ],
-      [
-        "SUPERSERIE 1 — PECHO + ESPALDA",
-        "1B. Pull-over · Polea",
-        "3 series",
-        "15 kg × 12 / 17,5 kg × 12 / 15 kg × 12",
-        "15 kg × 12 / 20 kg × 8–10 / 17,5 kg × 10–12",
-        "weight",
-        3,
-        "mon_pull",
-        ""
-      ],
-      [
-        "SUPERSERIE 2 — BRAZOS",
-        "2A. Curl bíceps · Mancuernas",
-        "3 series",
-        "8 kg × 12 / 10 kg × 11 / 8 kg × 12",
-        "8 kg × 12 / 10 kg × 12 / 10 kg × 8–10",
-        "weight",
-        3,
-        "mon_bic",
-        ""
-      ],
-      [
-        "SUPERSERIE 2 — BRAZOS",
-        "2B. Tríceps · Polea",
-        "3 series",
-        "12,5 kg × 12 / 10 kg × 12 / 12,5 kg × 10",
-        "12,5 kg × 12 / 15 kg × 8–10 / 12,5 kg × 10",
-        "weight",
-        3,
-        "mon_tri",
-        ""
-      ],
-      [
-        "SUPERSERIE 3 — HOMBROS",
-        "3A. Elevaciones laterales · Mancuernas",
-        "3 series",
-        "6 kg × 12 / 7,5 kg × 12 / 7,5 kg × 11",
-        "6 kg × 12 / 7,5 kg × 12 / 7,5 kg × 12",
-        "weight",
-        3,
-        "mon_lat",
-        ""
-      ],
-      [
-        "SUPERSERIE 3 — HOMBROS",
-        "3B. Rotación externa · Mancuernas",
-        "3 series",
-        "2,5 kg × 12 / 3 kg × 12 / 3 kg × 11",
-        "2,5 kg × 12 / 3 kg × 12 / 3 kg × 10–12",
-        "weight",
-        3,
-        "mon_rot",
-        ""
-      ],
-      [
-        "BLOQUE 4 — CORE",
-        "4A. Plancha frontal",
-        "2 series",
-        "60 / 70 s",
-        "65 / 75 s",
-        "time",
-        2,
-        "mon_plank",
-        ""
-      ],
-      [
-        "BLOQUE 4 — CORE",
-        "4B. Crunch inclinado",
-        "2 series",
-        "5 kg × 12 / 10 kg × 12",
-        "10 kg × 12 / 10 kg × 12",
-        "weight",
-        2,
-        "mon_crunch",
-        ""
-      ]
-    ]
+const ROUTINE={
+  "schemaVersion": 1,
+  "week": {
+    "title": "Entrenamiento · Semana 16–20 noviembre 2026",
+    "heading": "SEMANA 16 — 20 NOVIEMBRE 2026",
+    "subtitle": "V10.1 · fuerza funcional + resistencia · progresión controlada · 3 fuerza + 2 cardio",
+    "storageKey": "entreno_v10_semana_2026-11-16"
   },
-  {
-    "id": "tue",
-    "tab": "Mar · Cardio A",
-    "title": "MARTES 17 — CARDIO A + CORE",
-    "session": "CARDIO A + CORE",
-    "type": "strength",
-    "ex": [
+  "rules": [
+    {
+      "text": "RIR habitual 2–3 · descanso entre rondas de superseries 90–120 s · series exigentes 2–3 min. Mancuernas: peso por mancuerna. Las aproximaciones no cuentan como series. En superseries: realizar los ejercicios consecutivamente y descansar al finalizar cada ronda. Si un ejercicio tiene más series que otro, completar las restantes individualmente.",
+      "muted": false
+    },
+    {
+      "text": "Sin carrera. No forzar molestias articulares. Rodilla: comprobar durante y 24 h después. Cinta: no progresar velocidad e inclinación a la vez. Las cargas nuevas son objetivos de prueba. Si comprometen la técnica o dejan RIR 0–1, reducir peso sin forzar repeticiones. Si no realizas una serie, escribe 0.",
+      "muted": false
+    },
+    {
+      "text": "Semana de progresión controlada. Registra técnica, estabilidad y molestias con las nuevas cargas.",
+      "muted": true
+    }
+  ],
+  "days": [
+    {
+      "id": "mon",
+      "tab": "Lun · A",
+      "title": "LUNES 16 — FUERZA A",
+      "session": "FUERZA A",
+      "type": "strength",
+      "warm": "\u003col class=\"steps\"\u003e\u003cli\u003e5–7 min cinta suave + movilidad escapular.\u003c/li\u003e\u003cli\u003eAproximaciones progresivas de press.\u003c/li\u003e\u003c/ol\u003e",
+      "ex": [
+        [
+          "ACTIVACIÓN ESCAPULAR",
+          "Empujes escapulares en pared · Nuevo",
+          "2 × 10 suaves",
+          "Sin registro",
+          "2 × 10 suaves, movimiento controlado",
+          "control",
+          2,
+          "mon_scap",
+          "Priorizar control, sin buscar fatiga."
+        ],
+        [
+          "SUPERSERIE 1 — PECHO + ESPALDA",
+          "1A. Press pecho · Máquina",
+          "3 series",
+          "20 kg × 12 / 30 kg × 7 / 25 kg × 9 · RIR 3 · Hombro 0",
+          "20 kg × 12 / 30 kg × 7–9 / 25 kg × 10–12",
+          "weight",
+          3,
+          "mon_chest",
+          ""
+        ],
+        [
+          "SUPERSERIE 1 — PECHO + ESPALDA",
+          "1B. Pull-over · Polea",
+          "3 series",
+          "15 kg × 12 / 17,5 kg × 12 / 15 kg × 12",
+          "15 kg × 12 / 20 kg × 8–10 / 17,5 kg × 10–12",
+          "weight",
+          3,
+          "mon_pull",
+          ""
+        ],
+        [
+          "SUPERSERIE 2 — BRAZOS",
+          "2A. Curl bíceps · Mancuernas",
+          "3 series",
+          "8 kg × 12 / 10 kg × 11 / 8 kg × 12",
+          "8 kg × 12 / 10 kg × 12 / 10 kg × 8–10",
+          "weight",
+          3,
+          "mon_bic",
+          ""
+        ],
+        [
+          "SUPERSERIE 2 — BRAZOS",
+          "2B. Tríceps · Polea",
+          "3 series",
+          "12,5 kg × 12 / 10 kg × 12 / 12,5 kg × 10",
+          "12,5 kg × 12 / 15 kg × 8–10 / 12,5 kg × 10",
+          "weight",
+          3,
+          "mon_tri",
+          ""
+        ],
+        [
+          "SUPERSERIE 3 — HOMBROS",
+          "3A. Elevaciones laterales · Mancuernas",
+          "3 series",
+          "6 kg × 12 / 7,5 kg × 12 / 7,5 kg × 11",
+          "6 kg × 12 / 7,5 kg × 12 / 7,5 kg × 12",
+          "weight",
+          3,
+          "mon_lat",
+          ""
+        ],
+        [
+          "SUPERSERIE 3 — HOMBROS",
+          "3B. Rotación externa · Mancuernas",
+          "3 series",
+          "2,5 kg × 12 / 3 kg × 12 / 3 kg × 11",
+          "2,5 kg × 12 / 3 kg × 12 / 3 kg × 10–12",
+          "weight",
+          3,
+          "mon_rot",
+          ""
+        ],
+        [
+          "BLOQUE 4 — CORE",
+          "4A. Plancha frontal",
+          "2 series",
+          "60 / 70 s",
+          "65 / 75 s",
+          "time",
+          2,
+          "mon_plank",
+          ""
+        ],
+        [
+          "BLOQUE 4 — CORE",
+          "4B. Crunch inclinado",
+          "2 series",
+          "5 kg × 12 / 10 kg × 12",
+          "10 kg × 12 / 10 kg × 12",
+          "weight",
+          2,
+          "mon_crunch",
+          ""
+        ]
+      ]
+    },
+    {
+      "id": "tue",
+      "tab": "Mar · Cardio A",
+      "title": "MARTES 17 — CARDIO A + CORE",
+      "session": "CARDIO A + CORE",
+      "type": "strength",
+      "ex": [
+        [
+          "BLOQUE 2 — CORE ANTIROTACIÓN",
+          "Pallof press · Polea · Nuevo",
+          "2 series · 10 reps/lado",
+          "Sin registro",
+          "10 reps/lado / 10 reps/lado",
+          "weight",
+          2,
+          "tue_pallof",
+          "Carga ligera. Pausa de 1–2 s con brazos extendidos. Mantener tronco estable. No buscar fatiga máxima."
+        ]
+      ],
+      "cardio": {
+        "id": "tue_tread",
+        "name": "Cinta · Cardio A",
+        "type": "treadmill",
+        "previous": "13/11 — 15 min / 1,42 km. Velocidad media real: 5,68 km/h. Inclinación: 0 %. Esfuerzo: 4/10. Rodillas: 0.",
+        "target": "20 min · inclinación 0 % · esfuerzo 3–4/10",
+        "steps": [
+          "Min 0–5: 5,5 km/h · 0 %.",
+          "Min 5–15: 6 km/h · 0 %.",
+          "Min 15–20: 5,5 km/h · 0 %."
+        ],
+        "note": "No progresar velocidad e inclinación a la vez. Sin carrera.",
+        "section": "BLOQUE 1 — CINTA"
+      },
+      "cardioFirst": true
+    },
+    {
+      "id": "wed",
+      "tab": "Mié · B",
+      "title": "MIÉRCOLES 18 — FUERZA B",
+      "session": "FUERZA B",
+      "type": "strength",
+      "warm": "\u003col class=\"steps\"\u003e\u003cli\u003e5–7 min suaves.\u003c/li\u003e\u003cli\u003eMovilidad y aproximaciones.\u003c/li\u003e\u003cli\u003eComprobar rodillas antes de comenzar.\u003c/li\u003e\u003c/ol\u003e",
+      "ex": [
+        [
+          "SUPERSERIE 1 — CADENA POSTERIOR",
+          "1A. Peso muerto rumano · Mancuernas",
+          "3 series",
+          "10 kg × 12 / 10 kg × 12 / 12,5 kg × 12 · RIR 3",
+          "10 kg × 12 / 12,5 kg × 12 / 12,5 kg × 12",
+          "weight",
+          3,
+          "wed_rdl",
+          ""
+        ],
+        [
+          "SUPERSERIE 1 — CADENA POSTERIOR",
+          "1B. Curl femoral · Máquina",
+          "3 series",
+          "25 kg × 12 / 30 kg × 12 / 35 kg × 12 · RIR 3",
+          "30 kg × 12 / 35 kg × 10–12 / 35 kg × 10–12",
+          "weight",
+          3,
+          "wed_curl",
+          ""
+        ],
+        [
+          "BLOQUE 2 — CUÁDRICEPS + GEMELOS",
+          "2A. Prensa · Máquina",
+          "2 series",
+          "40 kg × 12 / 40 kg × 12 · RIR 4+ · dolor 0",
+          "40 kg × 12 / 40 kg × 12",
+          "weight",
+          2,
+          "wed_press",
+          "Mantener carga. Recorrido cómodo. No buscar RIR 2 a costa de la rodilla."
+        ],
+        [
+          "BLOQUE 2 — CUÁDRICEPS + GEMELOS",
+          "2B. Extensión cuádriceps · Máquina",
+          "3 series programadas",
+          "25 kg × 12 / 30 kg × 12 / 30 kg × 12 · RIR 4+",
+          "30 kg × 12 / 30 kg × 12 / 30 kg × 12",
+          "weight",
+          3,
+          "wed_quad",
+          ""
+        ],
+        [
+          "BLOQUE 2 — CUÁDRICEPS + GEMELOS",
+          "2C. Gemelos · Máquina",
+          "3 series",
+          "10 kg × 14 / 10 kg × 14 / 15 kg × 14",
+          "10 kg × 15 / 15 kg × 12 / 15 kg × 14",
+          "weight",
+          3,
+          "wed_calf",
+          ""
+        ],
+        [
+          "SUPERSERIE 3 — GLÚTEOS",
+          "3A. Hip thrust · Máquina",
+          "3 series",
+          "5 kg × 12 / 10 kg × 12 / 10 kg × 12 · RIR 3",
+          "10 kg × 12 / 10 kg × 12 / 12,5 kg × 10–12",
+          "weight",
+          3,
+          "wed_hip",
+          ""
+        ],
+        [
+          "SUPERSERIE 3 — GLÚTEOS",
+          "3B. Abductores · Máquina",
+          "3 series",
+          "30 kg × 12 / 35 kg × 12 / 40 kg × 12 · RIR 3",
+          "35 kg × 12 / 40 kg × 12 / 40 kg × 12",
+          "weight",
+          3,
+          "wed_abd",
+          ""
+        ],
+        [
+          "BLOQUE 4 — LUMBAR + CORE",
+          "4A. Extensión lumbar · Banco",
+          "2 series",
+          "Peso corporal × 12 / × 14",
+          "12 / 15 reps",
+          "body",
+          2,
+          "wed_back",
+          ""
+        ],
+        [
+          "BLOQUE 4 — LUMBAR + CORE",
+          "4B. Plancha lateral",
+          "2 series · tiempo por lado",
+          "S1 30 s/lado / S2 45 s/lado · Temblor en hombro de apoyo, sin dolor ni aprensión.",
+          "S1 30 s/lado / S2 35 s/lado",
+          "side",
+          2,
+          "wed_side",
+          "Priorizar control y estabilidad."
+        ]
+      ]
+    },
+    {
+      "id": "thu",
+      "tab": "Jue · Cardio B",
+      "title": "JUEVES 19 — CARDIO B",
+      "session": "CARDIO B",
+      "type": "strength",
+      "ex": [],
+      "cardio": {
+        "id": "thu_bike",
+        "name": "Bicicleta estática · Cardio B",
+        "type": "bike",
+        "previous": "Sin registro reciente válido",
+        "target": "15–20 min",
+        "steps": [
+          "Primeros 5 min muy suaves.",
+          "Bloque central: esfuerzo 3–4/10.",
+          "Últimos 5 min suaves."
+        ],
+        "note": "No aumentar resistencia por obligación. Comprobar respuesta de rodillas."
+      },
+      "cardioFirst": true
+    },
+    {
+      "id": "fri",
+      "tab": "Vie · C",
+      "title": "VIERNES 20 — FUERZA C",
+      "session": "FUERZA C",
+      "type": "strength",
+      "warm": "\u003col class=\"steps\"\u003e\u003cli\u003eMovilidad escapular.\u003c/li\u003e\u003cli\u003eAproximaciones de tirón y press.\u003c/li\u003e\u003cli\u003eComprobar estabilidad de hombros.\u003c/li\u003e\u003c/ol\u003e",
+      "ex": [
+        [
+          "BLOQUE 1 — ESPALDA + PECHO",
+          "1A. Tirón vertical neutro · Máquina",
+          "2 series",
+          "40 kg × 12 / 40 kg × 12 · RIR 3",
+          "45 kg × 8–10 / 40 kg × 12",
+          "weight",
+          2,
+          "fri_pull",
+          ""
+        ],
+        [
+          "BLOQUE 1 — ESPALDA + PECHO",
+          "1B. Remo horizontal · Máquina",
+          "2 series",
+          "25 kg × 12 / 30 kg × 12 · RIR 3",
+          "30 kg × 12 / 35 kg × 8–10",
+          "weight",
+          2,
+          "fri_row",
+          ""
+        ],
+        [
+          "BLOQUE 1 — ESPALDA + PECHO",
+          "1C. Press inclinado · Mancuernas",
+          "2 series",
+          "7,5 kg × 12 / 7,5 kg × 12 · RIR 3 · Hombro 0 · Aprensión 0",
+          "7,5 kg × 12 / 7,5 kg × 12",
+          "weight",
+          2,
+          "fri_chest",
+          "Banco 15–30°. Recorrido cómodo y controlado."
+        ],
+        [
+          "BLOQUE 1 — ESPALDA + PECHO",
+          "1D. Flexiones estándar",
+          "3 series",
+          "7 / 7 / 7 reps · RIR 3 · Hombro 0",
+          "8 / 8 / 8 reps",
+          "body",
+          3,
+          "fri_pushup",
+          ""
+        ],
+        [
+          "SUPERSERIE 2 — BRAZOS",
+          "2A. Curl bíceps · Mancuernas",
+          "3 series",
+          "8 kg × 12 / 8 kg × 12 / 8 kg × 13 · RIR 3",
+          "8 kg × 12 / 8 kg × 12 / 10 kg × 8–10",
+          "weight",
+          3,
+          "fri_bic",
+          ""
+        ],
+        [
+          "SUPERSERIE 2 — BRAZOS",
+          "2B. Tríceps · Polea",
+          "2 series",
+          "12,5 kg × 12 / 12,5 kg × 12 · RIR 3",
+          "15 kg × 8–10 / 12,5 kg × 12",
+          "weight",
+          2,
+          "fri_tri",
+          ""
+        ],
+        [
+          "BLOQUE 3 — DELTOIDES POSTERIOR",
+          "Deltoides posterior · Reverse pec deck · Nuevo",
+          "2 series · 12–15 reps",
+          "Sin registro",
+          "12–15 / 12–15 reps. Carga mínima cómoda. RIR 3–4.",
+          "weight",
+          2,
+          "fri_rear",
+          "Sustituye elevaciones laterales del viernes."
+        ],
+        [
+          "BLOQUE 4 — CONTROL ESCAPULAR",
+          "Paralelas · Apoyo asistido",
+          "1 bloque · 15–20 s",
+          "20 s con pies apoyados. Carga mínima. Temblor sin dolor ni aprensión.",
+          "15–20 s, pies apoyados, carga mínima",
+          "parallel",
+          1,
+          "fri_parallel",
+          "Sin bajadas, fondos ni apoyo libre."
+        ]
+      ]
+    }
+  ],
+  "fields": {
+    "scales": {
+      "mon_scap": [
+        [
+          "mon_scap_shoulder",
+          "Molestias hombro"
+        ]
+      ],
+      "tue_pallof": [
+        [
+          "tue_pallof_shoulder",
+          "Molestias hombro"
+        ]
+      ],
+      "wed_press": [
+        [
+          "wed_press_knee",
+          "Rodilla durante"
+        ],
+        [
+          "wed_press_knee_after",
+          "Rodilla después"
+        ]
+      ],
+      "wed_quad": [
+        [
+          "wed_quad_knee",
+          "Rodilla durante"
+        ]
+      ],
+      "wed_side": [
+        [
+          "wed_side_shoulder",
+          "Molestias hombro"
+        ]
+      ],
+      "fri_chest": [
+        [
+          "fri_chest_shoulder_during",
+          "Hombro durante"
+        ]
+      ],
+      "fri_pushup": [
+        [
+          "fri_pushup_shoulder_during",
+          "Hombro durante"
+        ]
+      ]
+    },
+    "texts": {
+      "mon_scap": [
+        [
+          "mon_scap_control",
+          "Temblor / control"
+        ]
+      ],
+      "mon_chest": [
+        [
+          "mon_chest_stability",
+          "Hombro / estabilidad"
+        ]
+      ],
+      "mon_rot": [
+        [
+          "mon_rot_control",
+          "Control del hombro"
+        ]
+      ],
+      "wed_rdl": [
+        [
+          "wed_rdl_technique",
+          "Lumbar / técnica"
+        ]
+      ],
+      "wed_back": [
+        [
+          "wed_back_lumbar",
+          "Lumbar"
+        ]
+      ],
+      "fri_row": [
+        [
+          "fri_row_stability",
+          "Hombro / estabilidad"
+        ]
+      ],
+      "fri_chest": [
+        [
+          "fri_chest_stability",
+          "Aprensión / estabilidad"
+        ]
+      ],
+      "tue_pallof": [
+        [
+          "tue_pallof_control",
+          "Control del tronco"
+        ]
+      ],
+      "wed_side": [
+        [
+          "wed_side_control",
+          "Temblor / control"
+        ]
+      ],
+      "fri_pull": [
+        [
+          "fri_pull_stability",
+          "Hombro / estabilidad"
+        ]
+      ],
+      "fri_rear": [
+        [
+          "fri_rear_stability",
+          "Hombro / estabilidad"
+        ]
+      ],
+      "fri_parallel": [
+        [
+          "fri_parallel_control",
+          "Temblor / control"
+        ]
+      ]
+    },
+    "optionalSets": {}
+  },
+  "weekly": {
+    "sessions": [
       [
-        "BLOQUE 2 — CORE ANTIROTACIÓN",
-        "Pallof press · Polea · Nuevo",
-        "2 series · 10 reps/lado",
-        "Sin registro",
-        "10 reps/lado / 10 reps/lado",
-        "weight",
-        2,
-        "tue_pallof",
-        "Carga ligera. Pausa de 1–2 s con brazos extendidos. Mantener tronco estable. No buscar fatiga máxima."
+        "mon",
+        "Fuerza A"
+      ],
+      [
+        "tue",
+        "Cardio A"
+      ],
+      [
+        "wed",
+        "Fuerza B"
+      ],
+      [
+        "thu",
+        "Cardio B"
+      ],
+      [
+        "fri",
+        "Fuerza C"
       ]
     ],
-    "cardio": {
-      "id": "tue_tread",
-      "name": "Cinta · Cardio A",
-      "type": "treadmill",
-      "previous": "13/11 — 15 min / 1,42 km. Velocidad media real: 5,68 km/h. Inclinación: 0 %. Esfuerzo: 4/10. Rodillas: 0.",
-      "target": "20 min · inclinación 0 % · esfuerzo 3–4/10",
-      "steps": [
-        "Min 0–5: 5,5 km/h · 0 %.",
-        "Min 5–15: 6 km/h · 0 %.",
-        "Min 15–20: 5,5 km/h · 0 %."
-      ],
-      "note": "No progresar velocidad e inclinación a la vez. Sin carrera.",
-      "section": "BLOQUE 1 — CINTA"
-    },
-    "cardioFirst": true
-  },
-  {
-    "id": "wed",
-    "tab": "Mié · B",
-    "title": "MIÉRCOLES 18 — FUERZA B",
-    "session": "FUERZA B",
-    "type": "strength",
-    "warm": "<ol class=\"steps\"><li>5–7 min suaves.</li><li>Movilidad y aproximaciones.</li><li>Comprobar rodillas antes de comenzar.</li></ol>",
-    "ex": [
+    "texts": [
       [
-        "SUPERSERIE 1 — CADENA POSTERIOR",
-        "1A. Peso muerto rumano · Mancuernas",
-        "3 series",
-        "10 kg × 12 / 10 kg × 12 / 12,5 kg × 12 · RIR 3",
-        "10 kg × 12 / 12,5 kg × 12 / 12,5 kg × 12",
-        "weight",
-        3,
-        "wed_rdl",
-        ""
+        "weekly_knee",
+        "Rodilla 24 h después de Fuerza B"
       ],
       [
-        "SUPERSERIE 1 — CADENA POSTERIOR",
-        "1B. Curl femoral · Máquina",
-        "3 series",
-        "25 kg × 12 / 30 kg × 12 / 35 kg × 12 · RIR 3",
-        "30 kg × 12 / 35 kg × 10–12 / 35 kg × 10–12",
-        "weight",
-        3,
-        "wed_curl",
-        ""
+        "weekly_shoulders",
+        "Respuesta hombros a nuevas cargas"
       ],
       [
-        "BLOQUE 2 — CUÁDRICEPS + GEMELOS",
-        "2A. Prensa · Máquina",
-        "2 series",
-        "40 kg × 12 / 40 kg × 12 · RIR 4+ · dolor 0",
-        "40 kg × 12 / 40 kg × 12",
-        "weight",
-        2,
-        "wed_press",
-        "Mantener carga. Recorrido cómodo. No buscar RIR 2 a costa de la rodilla."
+        "weekly_control",
+        "Control escapular / temblores"
       ],
       [
-        "BLOQUE 2 — CUÁDRICEPS + GEMELOS",
-        "2B. Extensión cuádriceps · Máquina",
-        "3 series programadas",
-        "25 kg × 12 / 30 kg × 12 / 30 kg × 12 · RIR 4+",
-        "30 kg × 12 / 30 kg × 12 / 30 kg × 12",
-        "weight",
-        3,
-        "wed_quad",
-        ""
+        "weekly_pallof",
+        "Tolerancia al Pallof press"
       ],
       [
-        "BLOQUE 2 — CUÁDRICEPS + GEMELOS",
-        "2C. Gemelos · Máquina",
-        "3 series",
-        "10 kg × 14 / 10 kg × 14 / 15 kg × 14",
-        "10 kg × 15 / 15 kg × 12 / 15 kg × 14",
-        "weight",
-        3,
-        "wed_calf",
-        ""
+        "weekly_rear",
+        "Tolerancia al reverse pec deck"
       ],
       [
-        "SUPERSERIE 3 — GLÚTEOS",
-        "3A. Hip thrust · Máquina",
-        "3 series",
-        "5 kg × 12 / 10 kg × 12 / 10 kg × 12 · RIR 3",
-        "10 kg × 12 / 10 kg × 12 / 12,5 kg × 10–12",
-        "weight",
-        3,
-        "wed_hip",
-        ""
-      ],
-      [
-        "SUPERSERIE 3 — GLÚTEOS",
-        "3B. Abductores · Máquina",
-        "3 series",
-        "30 kg × 12 / 35 kg × 12 / 40 kg × 12 · RIR 3",
-        "35 kg × 12 / 40 kg × 12 / 40 kg × 12",
-        "weight",
-        3,
-        "wed_abd",
-        ""
-      ],
-      [
-        "BLOQUE 4 — LUMBAR + CORE",
-        "4A. Extensión lumbar · Banco",
-        "2 series",
-        "Peso corporal × 12 / × 14",
-        "12 / 15 reps",
-        "body",
-        2,
-        "wed_back",
-        ""
-      ],
-      [
-        "BLOQUE 4 — LUMBAR + CORE",
-        "4B. Plancha lateral",
-        "2 series · tiempo por lado",
-        "S1 30 s/lado / S2 45 s/lado · Temblor en hombro de apoyo, sin dolor ni aprensión.",
-        "S1 30 s/lado / S2 35 s/lado",
-        "side",
-        2,
-        "wed_side",
-        "Priorizar control y estabilidad."
+        "weekly_general",
+        "Sensaciones generales"
       ]
     ]
   },
-  {
-    "id": "thu",
-    "tab": "Jue · Cardio B",
-    "title": "JUEVES 19 — CARDIO B",
-    "session": "CARDIO B",
-    "type": "strength",
-    "ex": [],
-    "cardio": {
-      "id": "thu_bike",
-      "name": "Bicicleta estática · Cardio B",
-      "type": "bike",
-      "previous": "Sin registro reciente válido",
-      "target": "15–20 min",
-      "steps": [
-        "Primeros 5 min muy suaves.",
-        "Bloque central: esfuerzo 3–4/10.",
-        "Últimos 5 min suaves."
-      ],
-      "note": "No aumentar resistencia por obligación. Comprobar respuesta de rodillas."
-    },
-    "cardioFirst": true
-  },
-  {
-    "id": "fri",
-    "tab": "Vie · C",
-    "title": "VIERNES 20 — FUERZA C",
-    "session": "FUERZA C",
-    "type": "strength",
-    "warm": "<ol class=\"steps\"><li>Movilidad escapular.</li><li>Aproximaciones de tirón y press.</li><li>Comprobar estabilidad de hombros.</li></ol>",
-    "ex": [
-      [
-        "BLOQUE 1 — ESPALDA + PECHO",
-        "1A. Tirón vertical neutro · Máquina",
-        "2 series",
-        "40 kg × 12 / 40 kg × 12 · RIR 3",
-        "45 kg × 8–10 / 40 kg × 12",
-        "weight",
-        2,
-        "fri_pull",
-        ""
-      ],
-      [
-        "BLOQUE 1 — ESPALDA + PECHO",
-        "1B. Remo horizontal · Máquina",
-        "2 series",
-        "25 kg × 12 / 30 kg × 12 · RIR 3",
-        "30 kg × 12 / 35 kg × 8–10",
-        "weight",
-        2,
-        "fri_row",
-        ""
-      ],
-      [
-        "BLOQUE 1 — ESPALDA + PECHO",
-        "1C. Press inclinado · Mancuernas",
-        "2 series",
-        "7,5 kg × 12 / 7,5 kg × 12 · RIR 3 · Hombro 0 · Aprensión 0",
-        "7,5 kg × 12 / 7,5 kg × 12",
-        "weight",
-        2,
-        "fri_chest",
-        "Banco 15–30°. Recorrido cómodo y controlado."
-      ],
-      [
-        "BLOQUE 1 — ESPALDA + PECHO",
-        "1D. Flexiones estándar",
-        "3 series",
-        "7 / 7 / 7 reps · RIR 3 · Hombro 0",
-        "8 / 8 / 8 reps",
-        "body",
-        3,
-        "fri_pushup",
-        ""
-      ],
-      [
-        "SUPERSERIE 2 — BRAZOS",
-        "2A. Curl bíceps · Mancuernas",
-        "3 series",
-        "8 kg × 12 / 8 kg × 12 / 8 kg × 13 · RIR 3",
-        "8 kg × 12 / 8 kg × 12 / 10 kg × 8–10",
-        "weight",
-        3,
-        "fri_bic",
-        ""
-      ],
-      [
-        "SUPERSERIE 2 — BRAZOS",
-        "2B. Tríceps · Polea",
-        "2 series",
-        "12,5 kg × 12 / 12,5 kg × 12 · RIR 3",
-        "15 kg × 8–10 / 12,5 kg × 12",
-        "weight",
-        2,
-        "fri_tri",
-        ""
-      ],
-      [
-        "BLOQUE 3 — DELTOIDES POSTERIOR",
-        "Deltoides posterior · Reverse pec deck · Nuevo",
-        "2 series · 12–15 reps",
-        "Sin registro",
-        "12–15 / 12–15 reps. Carga mínima cómoda. RIR 3–4.",
-        "weight",
-        2,
-        "fri_rear",
-        "Sustituye elevaciones laterales del viernes."
-      ],
-      [
-        "BLOQUE 4 — CONTROL ESCAPULAR",
-        "Paralelas · Apoyo asistido",
-        "1 bloque · 15–20 s",
-        "20 s con pies apoyados. Carga mínima. Temblor sin dolor ni aprensión.",
-        "15–20 s, pies apoyados, carga mínima",
-        "parallel",
-        1,
-        "fri_parallel",
-        "Sin bajadas, fondos ni apoyo libre."
-      ]
-    ]
-  }
-];
+  "resetMessage": "Esto borrará SOLO los datos de la semana 16–20 de noviembre. No crea una semana nueva. ¿Seguro?"
+};
+const WEEK=ROUTINE.week.heading;
+const STORE=ROUTINE.week.storageKey;
+const RIRS=[0,1,2,3,"4+"];
+const DAYS=ROUTINE.days;
 let storageProblem="";
 function loadState(){try{const raw=localStorage.getItem(STORE);const x=JSON.parse(raw||"{}");if(!x||typeof x!=="object"||Array.isArray(x))throw Error();return x}catch(e){storageProblem="No se han podido leer los datos guardados. Los datos anteriores no se borran hasta que registres cambios.";return {}}}
 const state=loadState();
@@ -452,12 +651,12 @@ function dayStart(d){return `<div class="day" id="day_${d.id}" data-day="${d.id}
 function exerciseOmit(id){return `<label class="skip"><input type="checkbox" data-omit="${id}" data-k="${id}_omit" ${val(id+"_omit")===true?'checked':''}> Omitir ejercicio</label>`}
 function exerciseSkipped(id){return val(id+"_omit")===true}
 
-const OPTIONAL_SETS={};
+const OPTIONAL_SETS=ROUTINE.fields.optionalSets;
 function optionalSet(id,i){return (OPTIONAL_SETS[id]||[]).includes(i)}
 function emptySet(id,type,i){return (type==="time"?["_t"]:type==="body"?["_r"]:["_w","_r"]).every(k=>String(val(id+k+i)).trim()==="")}
-function exerciseScales(id){return ({mon_scap:[["mon_scap_shoulder","Molestias hombro"]],tue_pallof:[["tue_pallof_shoulder","Molestias hombro"]],wed_press:[["wed_press_knee","Rodilla durante"],["wed_press_knee_after","Rodilla después"]],wed_quad:[["wed_quad_knee","Rodilla durante"]],wed_side:[["wed_side_shoulder","Molestias hombro"]],fri_chest:[["fri_chest_shoulder_during","Hombro durante"]],fri_pushup:[["fri_pushup_shoulder_during","Hombro durante"]]})[id]||[]}
+function exerciseScales(id){return ROUTINE.fields.scales[id]||[]}
 
-function exerciseTexts(id){return ({mon_scap:[["mon_scap_control","Temblor / control"]],mon_chest:[["mon_chest_stability","Hombro / estabilidad"]],mon_rot:[["mon_rot_control","Control del hombro"]],wed_rdl:[["wed_rdl_technique","Lumbar / técnica"]],wed_back:[["wed_back_lumbar","Lumbar"]],fri_row:[["fri_row_stability","Hombro / estabilidad"]],fri_chest:[["fri_chest_stability","Aprensión / estabilidad"]],tue_pallof:[["tue_pallof_control","Control del tronco"]],wed_side:[["wed_side_control","Temblor / control"]],fri_pull:[["fri_pull_stability","Hombro / estabilidad"]],fri_rear:[["fri_rear_stability","Hombro / estabilidad"]],fri_parallel:[["fri_parallel_control","Temblor / control"]]})[id]||[]}
+function exerciseTexts(id){return ROUTINE.fields.texts[id]||[]}
 function extraTexts(id){return exerciseTexts(id).map(([k,l])=>`<div class="label">${l}</div>${comment(k)}`).join("")}
 function renderExercise(e){
  const [sec,n,r,p,t,type,sets,id,note]=e;let rows="";
@@ -496,8 +695,8 @@ function summaryCardioBlock(c){
  return `\n${c.name.toUpperCase()}\nTiempo del bloque: ${fmtNum(val(k+"_time"))} min\nDistancia: ${fmtNum(val(k+"_distance"))} km\n`+(c.type==="treadmill"?`Velocidad seleccionada: ${fmtNum(val(k+"_programmed"))} km/h\nVelocidad media real calculada: ${speed(k)} km/h\nInclinación: ${fmtNum(val(k+"_incline"))} %\n`:`Velocidad media calculada: ${speed(k)} km/h\nResistencia: ${val(k+"_resistance")}\n`)+`Esfuerzo: ${val(k+"_effort")}/10\nRodilla durante: ${val(k+"_knee_during")}/10\nRodilla después: ${val(k+"_knee_after")}/10\nComentarios: ${val(k+"_c")||"—"}\n`;
 }
 
-const WEEKLY_SESSIONS=[["mon","Fuerza A"],["tue","Cardio A"],["wed","Fuerza B"],["thu","Cardio B"],["fri","Fuerza C"]];
-const WEEKLY_TEXTS=[["weekly_knee","Rodilla 24 h después de Fuerza B"],["weekly_shoulders","Respuesta hombros a nuevas cargas"],["weekly_control","Control escapular / temblores"],["weekly_pallof","Tolerancia al Pallof press"],["weekly_rear","Tolerancia al reverse pec deck"],["weekly_general","Sensaciones generales"]];
+const WEEKLY_SESSIONS=ROUTINE.weekly.sessions;
+const WEEKLY_TEXTS=ROUTINE.weekly.texts;
 function weeklyDay(){return `<div class="day" id="day_weekly" data-day="weekly"><div class="dayhead"><h2>CIERRE SEMANAL</h2></div><div class="card">${WEEKLY_SESSIONS.map(([id,l])=>`<div class="label">${l}</div><select data-k="weekly_${id}"><option value="">Selecciona…</option><option value="yes">${id==="tue"||id==="thu"?"Realizado":"Realizada"}</option><option value="no">${id==="tue"||id==="thu"?"No realizado":"No realizada"}</option></select>`).join("")}${WEEKLY_TEXTS.map(([k,l])=>`<div class="label">${l}</div>${comment(k)}`).join("")}</div></div>`}
 function summaryWeekly(){return WEEK+"\n\nCIERRE SEMANAL\n"+WEEKLY_SESSIONS.map(([id,l])=>l+": "+(val("weekly_"+id)==="yes"?(id==="tue"||id==="thu"?"Realizado":"Realizada"):(id==="tue"||id==="thu"?"No realizado":"No realizada"))).join("\n")+"\n\n"+WEEKLY_TEXTS.map(([k,l])=>l+": "+(val(k)||"—")).join("\n")}
 
@@ -633,7 +832,7 @@ $("#gen").onclick=()=>{
  const d=DAYS.find(x=>x.id===id),txt=summaryStrength(d);state._summary=txt;state._summaryDay=id;save();st.className="status ok show";st.textContent="✓ Día completo. Resumen listo para copiar.";$("#output").textContent=txt;$("#output").style.display="block";toast("Resumen generado");
 };
 $("#copy").onclick=async()=>{if(!state._summary || state._summaryDay!==(state._active||"mon")){toast("Primero genera esta pestaña");return}try{await navigator.clipboard.writeText(state._summary);toast("Copiado al portapapeles")}catch(e){toast("Mantén pulsado sobre el resumen para copiar")}};
-$("#reset").onclick=()=>{if(confirm("Esto borrará SOLO los datos de la semana 16–20 de noviembre. No crea una semana nueva. ¿Seguro?")){localStorage.removeItem(STORE);location.reload()}};
+$("#reset").onclick=()=>{if(confirm(ROUTINE.resetMessage)){localStorage.removeItem(STORE);location.reload()}};
 render();
 </script>
 </body></html>

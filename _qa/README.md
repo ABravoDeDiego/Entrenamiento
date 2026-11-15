@@ -157,3 +157,12 @@ Solicitud aprobada: un checkbox «Omitir ejercicio» por tarjeta, con comentario
 - Cierre semanal añade tolerancia al Pallof press y reverse pec deck.
 - QA: 30 PASS en Chromium, WebKit/Safari real no ejecutados. Pruebas existentes reutilizadas y cuatro casos añadidos para los cambios. Salida compacta, detalle en results.json.
 - Proceso para futuras actualizaciones: [PROCESO.md](PROCESO.md). Separar programación y plantilla es una propuesta pendiente; no se aplica en esta versión.
+
+
+## Separación aprobada de programación y plantilla
+
+- `_src/rutina.json` es la fuente de datos semanal, incluidos reglas, fechas, ejercicios, campos y cierre. `_src/plantilla.html` conserva presentación y lógica. `_src/generar.py` genera el `index.html` autónomo.
+- Sin peticiones adicionales de red, base de datos ni cambios del procedimiento de publicación. La web y la clave de almacenamiento de V10.1 permanecen iguales.
+- Actualización habitual: editar rutina → generar → comprobar → QA → publicar fuentes e index juntos. Documentación: [_src/README.md](../_src/README.md).
+- Generación determinista, modo `--check` para detectar HTML desactualizado y validación antes de escribir; datos inválidos no sobrescriben la versión válida.
+- QA: 30 PASS funcionales en Chromium y 6 pruebas del generador. Comparación anterior/nueva: siete pantallas y siete resúmenes idénticos, recuperación del estado persistido y captura visual equivalente. WebKit/Safari real no ejecutados.
